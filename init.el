@@ -3,9 +3,6 @@
 ;; Author Information
 
 ;;; Code:
-(setq user-full-name "Sean Brage")
-(setq user-mail-address "iamseanbrage@gmail.com")
-
 (package-initialize)
 
 (let ((default-directory "~/.emacs.d"))
