@@ -6,38 +6,44 @@
 (require 'package)
 
 (defvar my-packages
-  '(better-defaults
-    company
-    nyan-mode
+  '(;; Text Editing
+    better-defaults
+    markdown-mode
     editorconfig
-    nord-theme
-    elpy
-    autopair
+    smartparens
+    rainbow-delimiters
+    ;; UI
+    doom-themes
+    dashboard
+    ace-window
+    nyan-mode
+    neotree
     async ;; required for helm
     popup ;; required for helm
     projectile
     helm-projectile
-    counsel
-    swiper
-    json-mode
-    magit
-    markdown-mode
+    ;; Programming
+    company
+    flycheck
+    ;;; Python
+    elpy
     py-autopep8
     pipenv
-    rainbow-delimiters
+    magit
+    ;;; Front-End
+    json-mode
     js2-mode
-    rjsx-mode
-    exec-path-from-shell
-    flycheck
     web-mode
-    ace-window
-    org-pomodoro
-    neotree))
+    vue-mode
+    emmet-mode
+    ;; Utilities
+    exec-path-from-shell
+    org-pomodoro))
 
 (add-to-list
  'package-archives
- ;;'("melpa" . "http://melpa.org/packages/")
- '("melpa" ."http://melpa.milkbox.net/packages/")t)
+ '("melpa" . "http://melpa.org/packages/")
+ '("melpa" ."http://melpa.milkbox.net/packages/"))
 
 (when (not package-archive-contents)
   (package-refresh-contents))
@@ -47,5 +53,24 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+;; Require packages on startup so we have them available to configure in other init files
+(require 'editorconfig)
+(require 'emmet-mode)
+(require 'dashboard)
+(require 'neotree)
+(require 'better-defaults)
+(require 'ace-window)
+(require 'projectile)
+(require 'rainbow-delimiters)
+(require 'magit)
+(require 'flycheck)
+(require 'company)
+(require 'smartparens)
+(require 'web-mode)
+(require 'vue-mode)
+(require 'elpy)
+(require 'pipenv)
+(require 'helm-config)
+(require 'smartparens-config)
 (provide 'install-packages)
 ;;; install-packages.el ends here
