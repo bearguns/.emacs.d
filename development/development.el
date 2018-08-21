@@ -4,7 +4,7 @@
 ;;; Code:
 (global-set-key (kbd "M-o") 'ace-window)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.vue?\\'" . vue-mode))
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-hook 'before-save-hook 'whitespace-cleanup)
 (add-hook 'before-save-hook (lambda() (delete-trailing-whitespace)))
@@ -27,6 +27,8 @@
 (setq-default web-mode-enable-current-column-highlight t)
 (setq-default js2-basic-offset 2)
 (setq-default js-indent-level 2)
+(setq-default css-indent-offset 2)
+(setq-default vue-html-tab-width 2)
 (setq-default company-idle-delay 0)
 (setq-default company-echo-delay 0)
 (setq-default company-minimum-prefix-length 1)
