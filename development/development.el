@@ -16,6 +16,7 @@
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (add-hook 'after-init-hook #'smartparens-global-mode)
 (add-hook 'web-mode-hook #'emmet-mode)
+(add-hook 'vue-mode-hook #'emmet-mode)
 (add-hook 'python-mode-hook #'elpy-enable)
 (add-hook 'python-mode-hook #'pipenv-mode)
 (add-hook 'python-mode-hook #'pipenv-activate)
