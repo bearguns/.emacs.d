@@ -1,30 +1,24 @@
-;;; autocompletion.el --- company autocompletion settings by Sean
+;;; autocompletion.el --- autocompletion settings by Sean
 ;;; Commentary:
 ;; provide autocompletion for coding and editing lisp files
 
 ;;; Code:
 ;; list and install packages
 (require 'package)
-(defvar company-packages
-  '(company
-    company-jedi))
+(defvar autocompletion-packages
+  '(auto-complete))
 
 (when (not package-archive-contents)
   (package-refresh-contents))
 (package-initialize)
 
-(dolist (p company-packages)
+(dolist (p autocompletion-packages)
   (when (not (package-installed-p p))
     (package-install p)))
 
 ;; configure installed packages
-;; enable company-jedi
-(require 'company)
-(defun my/python-mode-hook ()
-  (add-to-list 'company-backends 'company-jedi))
-
-(add-hook 'python-mode-hook 'company-mode)
-(add-hook 'python-mode-hook 'my/python-mode-hook)
+(with-eval-after-load "autocompletion"
+  (ac-config-default))
 
 (provide 'autocompletion)
-;;; company.el ends here
+;;; autocompletion.el ends here

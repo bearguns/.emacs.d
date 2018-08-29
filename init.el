@@ -8,6 +8,13 @@
 
 ;;; list and install core packages
 (require 'package)
+;;; load custom configuration packages from ./
+(load-library "theme")
+(load-library "python-config")
+(load-library "org-config")
+(load-library "javascript-config")
+(load-library "autocompletion")
+
 (defvar init-packages
   '(better-defaults
     editorconfig
@@ -31,7 +38,6 @@
     (package-install p)))
 
 ;; configure installed packages
-(package-initialize)
 (require 'ace-window)
 (require 'better-defaults)
 (require 'neotree)
@@ -40,8 +46,8 @@
 (require 'smartparens-config)
 (require 'magit)
 
-(add-hook 'after-init-hook #'editorconfig-mode 1)
-(add-hook 'after-init-hook #'projectile-mode 1)
+(editorconfig-mode 1)
+(projectile-mode 1)
 
 ;; smartparens everywhere!
 (smartparens-global-mode t)
@@ -57,7 +63,12 @@
 (setq neo-smart-open t)
 (setq projectile-switch-project-action 'neotree-projectile-action)
 
-
+;; dashboard
+(setq dashboard-items '((recents . 5)
+                        (bookmarks . 5)
+                        (projects . 5)
+                        (agenda . 5)
+                        (registers . 5)))
 
 ;; Global Keybindings
 (global-set-key (kbd "M-o") 'ace-window)
@@ -80,18 +91,10 @@
 
 ;; Set font
 (set-face-attribute 'default nil
-                    :family "Fira Code"
+                    :family "DejaVuSansMono Nerd Font"
                     :height 150
                     :weight 'normal
                     :width 'normal)
-
-
-;;; load custom configuration packages from ./
-(require 'theme)
-(require 'org)
-(require 'python)
-(require 'javascript)
-(require 'autocompletion)
 
 ;;; init.el ends here
 (custom-set-variables
@@ -101,12 +104,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" "1c082c9b84449e54af757bcae23617d11f563fc9f33a832a8a2813c4d7dfb652" "b35a14c7d94c1f411890d45edfb9dc1bd61c5becd5c326790b51df6ebf60f402" default)))
- '(elpy-mode-hook (quote (subword-mode))))
+    ("f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" default))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-

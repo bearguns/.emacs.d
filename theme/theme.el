@@ -1,3 +1,5 @@
+
+
 ;;; theme.el --- Emacs UI & Theme Customization
 ;;; Commentary:
 ;; loads doom-themes, selects a color theme, and customizes things like the modeline and neotree
@@ -32,12 +34,17 @@
 ;;; color theme
 (require 'doom-themes)
 (load-theme 'doom-dracula)
+(setq custom-safe-themes '(
+                           doom-dracula))
 (doom-themes-neotree-config)
 (doom-themes-org-config)
 (doom-themes-visual-bell-config)
 ;;; rainbow delimiters
 (require 'rainbow-delimiters)
 (rainbow-delimiters-mode)
+
+(add-to-list 'default-frame-alist '(height . 48))
+(add-to-list 'default-frame-alist '(width . 160))
 
 (provide 'theme)
 ;;; theme.el ends here

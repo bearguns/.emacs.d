@@ -29,6 +29,6 @@
 (global-set-key "\C-cb" 'org-switchb)
 
 (setq-default org-directory "~/Dropbox/org")
-
+(setq org-agenda-files '("~/Dropbox/org"))
 (provide 'org-config)
 ;;; org-config ends here
