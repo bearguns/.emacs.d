@@ -7,8 +7,7 @@
 (require 'package)
 (defvar python-packages
   '(elpy
-    pipenv
-    jedi))
+    pipenv))
 
 (when (not package-archive-contents)
   (package-refresh-contents))
@@ -23,10 +22,7 @@
     (defun my-python-mode-hook ()
       (elpy-mode)
       (pipenv-mode)
-      (setq jedi:setup-keys t)
-      (setq jedi:complete-on-dot t))
-    (add-hook 'python-mode-hook 'my-python-mode-hook)
-    (add-hook 'python-mode-hook 'jedi:setup))
+    (add-hook 'python-mode-hook 'my-python-mode-hook)))
 
 (provide 'python)
 ;;; python.el ends here
