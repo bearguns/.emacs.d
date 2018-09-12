@@ -4,7 +4,7 @@
 
 ;;; Code:
 (require 'package)
-(defvar javascript-packages
+(setq javascript-packages
   '(js2-mode
     web-mode
     vue-mode
@@ -12,11 +12,13 @@
     emmet-mode
     graphql-mode))
 
-(package-refresh-contents)
 (package-initialize)
 
+(unless package-archive-contents
+  (package-refresh-contents))
+
 (dolist (p javascript-packages)
-  (when (not (package-installed-p p))
+  (unless (package-installed-p p)
     (package-install p)))
 
 ;; configure installed packages

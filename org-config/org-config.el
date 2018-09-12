@@ -6,17 +6,19 @@
 ;;; Code:
 ;;; list and install org-mode packages
 (require 'package)
-(package-initialize)
-(defvar init-packages
+
+(setq org-packages
   '(org-pomodoro
     ))
 
-(when (not package-archive-contents)
-  (package-refresh-contents))
 (package-initialize)
 
-(dolist (p init-packages)
-  (when (not (package-installed-p p))
+(unless package-archive-contents
+  (package-refresh-contents))
+
+
+(dolist (p org-packages)
+  (unless (package-installed-p p)
     (package-install p)))
 
 ;; configure installed packages

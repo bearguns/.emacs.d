@@ -7,19 +7,20 @@
 ;;; Code:
 (require 'package)
 ;; list and install packages
-(defvar layer-packages
+(setq theme-packages
   '(doom-themes
     nyan-mode
     neotree
     solaire-mode
     rainbow-delimiters))
 
-(when (not package-archive-contents)
-  (package-refresh-contents))
 (package-initialize)
 
-(dolist (p layer-packages)
-  (when (not (package-installed-p p))
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(dolist (p theme-packages)
+  (unless (package-installed-p p)
     (package-install p)))
 
 ;; configure installed packages

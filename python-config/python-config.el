@@ -5,16 +5,17 @@
 ;;; Code:
 ;;; list and install python packages
 (require 'package)
-(defvar python-packages
+(setq python-packages
   '(elpy
     pipenv))
 
-(when (not package-archive-contents)
-  (package-refresh-contents))
 (package-initialize)
 
+(unless package-archive-contents
+  (package-refresh-contents))
+
 (dolist (p python-packages)
-  (when (not (package-installed-p p))
+  (unless (package-installed-p p)
     (package-install p)))
 
 ;; configure installed packages

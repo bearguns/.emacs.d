@@ -5,21 +5,24 @@
 ;;; Code:
 ;; list and install packages
 (require 'package)
-(defvar autocompletion-packages
+(setq autocompletion-packages
   '(company
     counsel
     counsel-projectile))
 
-(when (not package-archive-contents)
-  (package-refresh-contents))
 (package-initialize)
 
+(unless package-archive-contents
+  (package-refresh-contents))
+
 (dolist (p autocompletion-packages)
-  (when (not (package-installed-p p))
+  (unless (package-installed-p p)
     (package-install p)))
 
 ;; configure installed packages
 (with-eval-after-load "autocompletion"
+  (dolist (p autocompletion-packages)
+    (require p))
   (ivy-mode 1)
   (add-hook 'after-init-hook 'global-company-mode)
   (setq ivy-use-virtual-buffers t)
@@ -32,10 +35,10 @@
   (global-set-key (kbd "<f1> l") 'counsel-find-library)
   (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
   (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (global-set-key (kbd "C-c k") 'counsel-ag)
   (global-set-key (kbd "C-x l") 'counsel-locate)
-  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  (ac-config-default))
+  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox))
 
 (provide 'autocompletion)
 ;;; autocompletion.el ends here
