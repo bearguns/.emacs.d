@@ -76,12 +76,17 @@
                         (registers . 5)))
 
 ;; Global Keybindings
-(global-set-key (kbd "M-o") 'ace-window)
 (global-set-key [f8] 'neotree-toggle)
+
+;;; window stuff
+(global-set-key (kbd "M-o") 'ace-window)
 (global-set-key (kbd "C-c <left>")  'windmove-left)
 (global-set-key (kbd "C-c <right>") 'windmove-right)
 (global-set-key (kbd "C-c <up>")    'windmove-up)
 (global-set-key (kbd "C-c <down>")  'windmove-down)
+(global-set-key (kbd "s-2") 'split-window-below)
+(global-set-key (kbd "s-3") 'split-window-right)
+(global-set-key (kbd "s-w") 'delete-window)
 (global-set-key (kbd "C-c g") 'magit)
 
 ;; Change 'yes or no' options to 'y or n'
@@ -114,7 +119,7 @@
      "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" default)))
  '(package-selected-packages
    (quote
-    (counsel-projectile counsel graphql-mode emmet-mode rjsx-mode vue-mode web-mode js2-mode org-pomodoro pipenv elpy rainbow-delimiters solaire-mode nyan-mode doom-themes projectile neotree ace-window magit dashboard smartparens exec-path-from-shell elscreen editorconfig better-defaults))))
+    (org-bullets counsel-projectile counsel graphql-mode emmet-mode rjsx-mode vue-mode web-mode js2-mode org-pomodoro pipenv elpy rainbow-delimiters solaire-mode nyan-mode doom-themes projectile neotree ace-window magit dashboard smartparens exec-path-from-shell elscreen editorconfig better-defaults))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

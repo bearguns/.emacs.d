@@ -8,14 +8,14 @@
 (require 'package)
 
 (setq org-packages
-  '(org-pomodoro
-    ))
+      '(org-pomodoro
+        org-bullets
+        ))
 
 (package-initialize)
 
 (unless package-archive-contents
   (package-refresh-contents))
-
 
 (dolist (p org-packages)
   (unless (package-installed-p p)
@@ -23,6 +23,11 @@
 
 ;; configure installed packages
 (require 'org-pomodoro)
+(require 'org-bullets)
+
+(add-hook 'org-mode-hook (lambda ()
+                           (auto-fill-mode 1)
+                           (org-bullets-mode 1)))
 
 ;; org-mode keybindings
 (global-set-key "\C-cl" 'org-store-link)
