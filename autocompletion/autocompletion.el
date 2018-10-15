@@ -6,7 +6,7 @@
 ;; list and install packages
 (require 'package)
 (setq autocompletion-packages
-  '(company
+  '(auto-complete
     counsel
     counsel-projectile))
 
@@ -24,7 +24,13 @@
   (dolist (p autocompletion-packages)
     (require p))
   (ivy-mode 1)
-  (add-hook 'after-init-hook 'global-company-mode)
+  (ac-config-default)
+  (setq ac-use-menu-map t)
+;; Default settings
+  (define-key ac-menu-map "\C-n" 'ac-next)
+  (define-key ac-menu-map "\C-p" 'ac-previous)
+  (setq ac-delay 0.2)
+  (setq ac-auto-start 2)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
   (global-set-key (kbd "C-s") 'swiper)

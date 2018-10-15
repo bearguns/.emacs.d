@@ -27,13 +27,25 @@
 (require 'vue-mode)
 (require 'emmet-mode)
 
+
 ;; use emmet!
 (add-hook 'web-mode-hook #'emmet-mode)
 (add-hook 'vue-mode-hook #'emmet-mode)
 (add-hook 'js2-mode-hook #'emmet-mode)
-
+(add-hook 'rjsx-mode-hook #'emmet-mode)
 (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
 (add-to-list 'auto-mode-alist '("pages\\/.*\\.js\\'" . rjsx-mode))
+
+;; tern down for what
+(add-to-list 'load-path "/usr/local/bin/tern/emacs/")
+(autoload 'tern-mode "tern.el" nil t)
+
+(add-hook 'js-mode-hook (lambda () (tern-mode t)))
+(add-hook 'rjsx-mode-hook (lambda () (tern-mode t)))
+(eval-after-load 'tern
+   '(progn
+      (require 'tern-auto-complete)
+      (tern-ac-setup)))
 
 (defun my-rjsx-mode-hook ()
   (setq emmet-expand-jsx-className? t))

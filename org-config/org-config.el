@@ -10,6 +10,7 @@
 (setq org-packages
       '(org-pomodoro
         org-bullets
+        org-journal
         ))
 
 (package-initialize)
@@ -24,6 +25,7 @@
 ;; configure installed packages
 (require 'org-pomodoro)
 (require 'org-bullets)
+(require 'org-journal)
 
 (add-hook 'org-mode-hook (lambda ()
                            (auto-fill-mode 1)
@@ -35,6 +37,8 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
 
+;; org journal stuff
+(setq-default org-journal-dir "~/Dropbox/org")
 (setq-default org-directory "~/Dropbox/org")
 (setq org-agenda-files '("~/Dropbox/org"))
 (provide 'org-config)

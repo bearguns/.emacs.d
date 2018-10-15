@@ -1,5 +1,3 @@
-
-
 ;;; init.el --- emacs configuration by Sean
 ;;; Commentary:
 ;; Author Information
@@ -36,11 +34,13 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+(load-theme 'sanityinc-tomorrow-eighties)
 (load-library "theme")
 (load-library "python-config")
 (load-library "org-config")
 (load-library "javascript-config")
 (load-library "autocompletion")
+(load-library "love2d")
 
 ;; configure installed packages
 (require 'better-defaults)
@@ -102,11 +102,13 @@
 
 ;; Set font
 (set-face-attribute 'default nil
-                    :family "Hack"
+                    :family "Fira Code"
                     :height 140
                     :weight 'normal
                     :width 'normal)
 
+;; Start the server (for opening files from external sources in the current Emacs instance)
+(server-start)
 ;;; init.el ends here
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -115,11 +117,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ((doom-dracula)
-     "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" default)))
+    ("628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" default)))
  '(package-selected-packages
    (quote
-    (org-bullets counsel-projectile counsel graphql-mode emmet-mode rjsx-mode vue-mode web-mode js2-mode org-pomodoro pipenv elpy rainbow-delimiters solaire-mode nyan-mode doom-themes projectile neotree ace-window magit dashboard smartparens exec-path-from-shell elscreen editorconfig better-defaults))))
+    (flycheck web-mode vue-mode treemacs spaceline solaire-mode smartparens rjsx-mode rainbow-delimiters pipenv org-pomodoro org-journal org-bullets nyan-mode neotree magit lua-mode graphql-mode exec-path-from-shell emmet-mode elscreen elpy editorconfig doom-themes dashboard counsel-projectile color-theme-sanityinc-tomorrow better-defaults autothemer auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

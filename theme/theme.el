@@ -1,5 +1,3 @@
-
-
 ;;; theme.el --- Emacs UI & Theme Customization
 ;;; Commentary:
 ;; loads doom-themes, selects a color theme, and customizes things like the modeline and neotree
@@ -24,7 +22,6 @@
     (package-install p)))
 
 ;; configure installed packages
-
 ;;; nyan mode
 (require 'nyan-mode)
 (add-hook 'nyan-mode-hook 'nyan-start-animation)
@@ -33,13 +30,10 @@
 (setq-default nyan-wavy-trail t)
 
 ;;; color theme
-(require 'doom-themes)
-(load-theme 'doom-dracula)
-(add-to-list 'custom-safe-themes
-             '(doom-dracula))
-(doom-themes-neotree-config)
 (doom-themes-org-config)
+(doom-themes-neotree-config)
 (doom-themes-visual-bell-config)
+
 ;;; rainbow delimiters
 (require 'rainbow-delimiters)
 (rainbow-delimiters-mode)
