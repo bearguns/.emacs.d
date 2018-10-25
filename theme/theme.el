@@ -6,11 +6,11 @@
 (require 'package)
 ;; list and install packages
 (setq theme-packages
-  '(doom-themes
-    nyan-mode
-    neotree
-    solaire-mode
-    rainbow-delimiters))
+   '(doom-themes
+     nyan-mode
+     neotree
+     solaire-mode
+     rainbow-delimiters))
 
 (package-initialize)
 
@@ -21,6 +21,14 @@
   (unless (package-installed-p p)
     (package-install p)))
 
+
+;; Set font
+(set-face-attribute 'default nil
+                    :family "Iosevka"
+                    :height 150
+                    :weight 'medium
+                    :width 'normal)
+
 ;; configure installed packages
 ;;; nyan mode
 (require 'nyan-mode)
@@ -30,6 +38,9 @@
 (setq-default nyan-wavy-trail t)
 
 ;;; color theme
+(load-theme 'doom-Iosvkem t)
+(setq doom-Iosvkem-brighter-modeline t)
+
 (doom-themes-org-config)
 (doom-themes-neotree-config)
 (doom-themes-visual-bell-config)
