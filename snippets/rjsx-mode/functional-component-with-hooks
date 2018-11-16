@@ -1,0 +1,10 @@
+# key: rhc
+# name: Functional Component w/ Hooks
+# contributor: Sean Brage
+# --
+import React, { useState } from 'react'
+
+export default function ${1:NewComponent}() {
+  const [${2:initialState}, ${3:setState}] = useState(${4:initialValue})
+  return ($5)
+}

@@ -1,0 +1,316 @@
+#+TITLE: Emacs.d
+#+AUTHOR: Sean Brage
+#+EMAIL: seanmbrage@me.com
+
+* My Emacs Configuration
+
+This is an attempt at creating a more readable and extensible Emacs
+configuration using [[http://orgmode.org][org-mode]] to write my configuration in the world's
+greatest text format. Many thanks go to Andrew Jarrett and [[https://github.com/ahrjarrett/.emacs.d][his
+excellent config files]] for providing inspiration and direction.
+
+* Init
+** File Settings
+#+BEGIN_SRC emacs-lisp
+;; Change 'yes or no' options to 'y or n'
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; disable auto-save and auto-backup
+(setq auto-save-default nil)
+(setq make-backup-files nil)
+(setq create-lockfiles nil)
+(setq inhibit-startup-message t)
+
+;; gimme line numbers
+(global-linum-mode t)
+
+;; Start the server (for opening files from external sources in the current Emacs instance)
+(server-start)
+#+END_SRC
+** GUI Settings
+*** Frame and Window Settings
+#+BEGIN_SRC emacs-lisp
+  ;; Set a decent window size:
+  (add-to-list 'default-frame-alist '(height . 64))
+  (add-to-list 'default-frame-alist '(width . 180))
+
+  ;; Remove os GUI stuff, it's ugly
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+#+END_SRC
+
+*** Font & Typefaces
+#+BEGIN_SRC emacs-lisp
+(set-face-attribute 'default nil
+                    :family "Iosevka Medium"
+                    :height 140
+                    :width 'normal)
+#+END_SRC
+
+*** Theme
+#+BEGIN_SRC emacs-lisp
+(use-package doom-themes
+  :ensure t
+  :defer t
+  :init 
+  (load-theme 'doom-Iosvkem t)
+  (setq doom-Iosvkem-brighter-modeline t))
+#+END_SRC
+
+*** Solaire Mode
+#+BEGIN_SRC emacs-lisp
+(use-package solaire-mode
+  :ensure t
+  :defer t
+  :init
+  ;; brighten buffers (that represent real files)
+  (add-hook 'change-major-mode-hook #'turn-on-solaire-mode)
+  ;; To enable solaire-mode unconditionally for certain modes:
+  (add-hook 'ediff-prepare-buffer-hook #'solaire-mode)
+  ;; ...if you use auto-revert-mode, this prevents solaire-mode from turning
+  ;; itself off every time Emacs reverts the file
+  (add-hook 'after-revert-hook #'turn-on-solaire-mode)
+  ;; highlight the minibuffer when it is activated:
+  (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
+  ;; if the bright and dark background colors are the wrong way around, use this
+  ;; to switch the backgrounds of the `default` and `solaire-default-face` faces.
+  ;; This should be used *after* you load the active theme!
+  ;; NOTE: This is necessary for themes in the doom-themes package!
+  (solaire-mode-swap-bg))
+#+END_SRC
+
+*** Very Important Settings
+#+BEGIN_SRC emacs-lisp
+(use-package nyan-mode
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'nyan-mode-hook 'nyan-start-animation)
+  (add-hook 'after-init-hook 'nyan-mode 1)
+  (setq-default nyan-animate-nyancat t)
+  (setq-default nyan-wavy-trail t))
+#+END_SRC
+
+** Text Editing
+*** Rainbow Delimiters
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-delimiters
+  :ensure t
+  :init
+  (rainbow-delimiters-mode))
+#+END_SRC
+
+*** Smart Parens
+#+BEGIN_SRC emacs-lisp
+(use-package smartparens
+  :ensure t
+  :defer t
+  :init
+  (require 'smartparens-config)
+  ;; use smartparens everywhere
+  (smartparens-global-mode 1))
+#+END_SRC
+*** Window Management
+**** Ace Window
+Ace Window provides easy shortcuts for moving between split panes in Emacs, so let's install it here.
+#+BEGIN_SRC emacs-lisp
+(use-package ace-window
+  :ensure t
+  :defer t
+  :init (global-set-key (kbd "M-o") 'ace-window))
+#+END_SRC
+**** Elscreen
+Elscreen provides a tmux-like environment to Emacs, allowing for multiple "sessions" of splits and buffers.
+#+BEGIN_SRC emacs-lisp
+(use-package elscreen
+  :ensure t
+  :defer t
+  :init (elscreen-start))
+#+END_SRC
+
+* Programming
+** Magit
+Magit is one of those, "switch to Emacs just so you can use..." packages. The only other Git interface that comes /close/ is Visual Studio Code, but you can't run that in emacs (yet).
+#+BEGIN_SRC emacs-lisp
+(use-package magit
+  :ensure t
+  :defer t
+  :init (global-set-key (kbd "C-x g") 'magit-status))
+#+END_SRC
+** Counsel
+#+BEGIN_SRC emacs-lisp
+;; counsel (ivy) for better ido-like completion in emacs
+(use-package counsel
+  :ensure t
+  :init
+  ;; turn it on plz
+  (ivy-mode 1)
+  ;; Default settings
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "(%d/%d) ")
+  (global-set-key (kbd "C-c k") 'counsel-ag)
+  (global-set-key (kbd "C-x l") 'counsel-locate)
+  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+  (global-set-key (kbd "C-s") 'swiper)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+  (global-set-key (kbd "<f1> l") 'counsel-find-library)
+  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+  (global-set-key (kbd "<f2> u") 'counsel-unicode-char))
+
+;; counsel-projectile provides wonderful project-based shortcuts and completion
+(use-package counsel-projectile
+  :ensure t)
+#+END_SRC
+
+** Projectile
+Projectile makes it really easy to get around different projects and repos.
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+  :ensure t
+  :defer t
+  :init
+  (projectile-mode 1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+#+END_SRC
+
+** Company Mode
+Company mode seems to still be the more broadly-used autocompletion library for emacs, so as much as I like auto-complete, we will stick with company for now.
+#+BEGIN_SRC emacs-lisp
+(use-package company
+  :ensure t
+  :defer t
+  :init (global-company-mode 1))
+#+END_SRC
+
+** Snippets
+Snippets are the best. Let's use them.
+#+BEGIN_SRC emacs-lisp
+(use-package yasnippet
+  :ensure t
+  :defer t
+  :init (yas-global-mode 1))
+#+END_SRC
+* JavaScript / Front-End Development
+** HTML + CSS
+*** Emmet
+Emmet can be thought of as Yasnippet for HTML, providing a rich expansion syntax for HTML templating.
+#+BEGIN_SRC emacs-lisp
+(use-package emmet-mode
+  :ensure t
+  :init
+  (add-hook 'web-mode-hook #'emmet-mode)
+  (add-hook 'vue-mode-hook #'emmet-mode)
+  (add-hook 'js2-mode-hook #'emmet-mode)
+  (add-hook 'rjsx-mode-hook #'emmet-mode))
+#+END_SRC
+*** Web Mode
+Web Mode makes working with HTML, CSS, and related technologies much nicer.
+#+BEGIN_SRC emacs-lisp
+(use-package web-mode
+  :ensure t
+  :init
+  (setq-default web-mode-enable-auto-pairing t)
+  (setq-default web-mode-enable-auto-closing t)
+  (setq-default web-mode-markup-indent-offset 2)
+  (setq-default web-mode-css-indent-offset 2)
+  (setq-default web-mode-code-indent-offset 2))
+#+END_SRC
+
+*** CSS Indentation
+#+BEGIN_SRC emacs-lisp
+(setq-default css-indent-offset 2)
+#+END_SRC
+
+** JavaScript
+*** JS2-Mode
+JS2-Mode is the preferred major mode for working with JavaScript files. It's not perfect, but it's good.
+#+BEGIN_SRC emacs-lisp
+(use-package js2-mode
+  :ensure t
+  :init
+  (setq-default js2-basic-offset 2)
+  (setq-default js2-strict-missing-semi-warning nil)
+  (setq-default js-indent-level 2))
+#+END_SRC
+*** TernJS
+TernJS is like MSFT's "Intellisense" for JavaScript, only not bound inside of a Visual Studio editor.
+#+BEGIN_SRC emacs-lisp
+;; Install tern by cloning the tern repo into the location of your choosing. I've chosen /usr/local/bin/tern
+;; once cloned, you need to npm install inside the tern directory
+;; tern down for what
+(add-to-list 'load-path "/usr/local/bin/tern/emacs/")
+(autoload 'tern-mode "tern.el" nil t)
+(add-hook 'js-mode-hook (lambda () (tern-mode t)))
+(add-hook 'rjsx-mode-hook (lambda () (tern-mode t)))
+#+END_SRC
+*** RJSX Mode
+RJSX mode provides a very nice experience working with React.js and JSX markup. It also extends js2-mode, providing a rich JavaScript environment in JS/JSX files.
+#+BEGIN_SRC emacs-lisp
+(use-package rjsx-mode
+  :ensure t
+  :init
+  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+  (add-to-list 'auto-mode-alist '("pages\\/.*\\.js\\'" . rjsx-mode)))
+#+END_SRC
+*** Tide
+Tide provides a TypeScript IDE-like experience in Emacs. Even if you aren't working in TS files, Tide gives you many great benefits.
+#+BEGIN_SRC emacs-lisp
+(use-package tide
+  :ensure t
+  :init
+  (defun setup-tide-mode ()
+    (interactive)
+    (tide-setup)
+    (flycheck-mode +1)
+    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+    (eldoc-mode +1)
+    (tide-hl-identifier-mode +1)
+    ;; company is an optional dependency. You have to
+    ;; install it separately via package-install
+    ;; `M-x package-install [ret] company`
+    (company-mode +1))
+    (add-hook 'rjsx-mode-hook #'setup-tide-mode)
+    (add-hook 'js2-mode-hook #'setup-tide-mode))
+#+END_SRC
+* Org Mode
+Org Mode is why you should /start/ using Emacs. This is how I like my config:
+
+** Basic Org Config
+#+BEGIN_SRC emacs-lisp
+;; store org files in Dropbox
+(setq-default org-directory "~/Dropbox/org")
+(setq org-agenda-files '("~/Dropbox/org"))
+;; fill columns in org mode (keep lines from going on into infinity)
+(add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))
+;; org-mode keybindings
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-switchb)
+#+END_SRC
+** Bullets
+The org-bullets package provides more visually-appealing bullets. Let's use it!
+#+BEGIN_SRC emacs-lisp
+(use-package org-bullets
+  :ensure t
+  :init
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+#+END_SRC
+** Org Pomodoro
+Pomodoro timers are the best way I know of to get into a good work flow. Now, you can start them right in Emacs, and have them logged alongside your org tasks!
+#+BEGIN_SRC emacs-lisp
+(use-package org-pomodoro
+  :ensure t
+  :init (require 'org-pomodoro))
+#+END_SRC
+** Org Journal
+Org Journal is a package for quickly creating journal entries using org-mode.
+#+BEGIN_SRC emacs-lisp
+(use-package org-journal
+  :ensure t
+  :init (setq-default org-journal-dir "~/Dropbox/org"))
+#+END_SRC

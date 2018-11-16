@@ -1,0 +1,11 @@
+# key: rcc
+# name: New React Class-Based Component w/o constructor
+# contributor: Sean Brage
+# --
+import React, { Component } from 'react'
+
+export default class ${1:NewClass} extends Component {
+  render() {
+    return <div>$2</div>
+  }
+}

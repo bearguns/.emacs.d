@@ -1,120 +1,46 @@
-;;; init.el --- emacs configuration by Sean
-;;; Commentary:
+;; init.el --- emacs configuration by Sean
+;; Commentary:
+;; Custom configuration, some copied from Andrew Jarrett's excellent config
 ;; Author Information
 ;;; Code:
-(let ((default-directory "~/.emacs.d"))
-  (normal-top-level-add-subdirs-to-load-path))
+(setq inhibit-startup-message t)
 
-;;; list and install core packages
+;; configure package management and installation
 (require 'package)
-
-;; Add package sources
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.org/packages/")))
-(setq init-packages
-  '(better-defaults
-    editorconfig
-    elscreen
-    exec-path-from-shell
-    smartparens
-    dashboard
-    magit
-    ace-window
-    neotree
-    projectile))
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/")
+             '("org" . "http://orgmode.org/elpa/"))
 
 (package-initialize)
 
-(unless package-archive-contents
-  (package-refresh-contents))
+;; use use-package because it's what people use
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(setq use-package-always-ensure t)
+(require 'use-package)
 
-(dolist (package init-packages)
-  (unless (package-installed-p package)
-    (package-install package)))
+;; set PATH and EXEC-PATH stuff
+(setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+(setq exec-path (append exec-path '("/usr/local/bin")))
 
-(load-library "theme")
-(load-library "python-config")
-(load-library "org-config")
-(load-library "javascript-config")
-(load-library "autocompletion")
-(load-library "love2d")
+;; read configuration from org file
+(org-babel-load-file (expand-file-name "~/.emacs.d/README.org"))
 
-;; configure installed packages
-(require 'better-defaults)
-(require 'neotree)
-(require 'elscreen)
-(require 'smartparens)
-(require 'smartparens-config)
-(require 'magit)
-
-(editorconfig-mode 1)
-(projectile-mode 1)
-
-;; smartparens everywhere!
-(smartparens-global-mode t)
-(smartparens-strict-mode)
-(elscreen-start)
-(projectile-mode 1)
-(ivy-mode 1)
-(counsel-projectile-mode)
-(dashboard-setup-startup-hook)
-(exec-path-from-shell-initialize)
-
-;; neotree options
-(setq neo-smart-open t)
-(setq projectile-switch-project-action 'neotree-projectile-action)
-
-;; dashboard
-(setq dashboard-items '((recents . 5)
-                        (bookmarks . 5)
-
-                        (projects . 5)
-                        (agenda . 5)
-                        (registers . 5)))
-
-;; Global Keybindings
-(global-set-key [f8] 'neotree-toggle)
-
-;;; window stuff
-(global-set-key (kbd "M-o") 'ace-window)
-(global-set-key (kbd "C-c <left>")  'windmove-left)
-(global-set-key (kbd "C-c <right>") 'windmove-right)
-(global-set-key (kbd "C-c <up>")    'windmove-up)
-(global-set-key (kbd "C-c <down>")  'windmove-down)
-(global-set-key (kbd "s-2") 'split-window-below)
-(global-set-key (kbd "s-3") 'split-window-right)
-(global-set-key (kbd "s-w") 'delete-window)
-(global-set-key (kbd "C-c g") 'magit)
-
-;; Change 'yes or no' options to 'y or n'
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;; disable auto-save and auto-backup
-(setq auto-save-default nil)
-(setq make-backup-files nil)
-(setq create-lockfiles nil)
-(setq inhibit-startup-message t)
-
-(global-linum-mode t)
-
-;; Start the server (for opening files from external sources in the current Emacs instance)
-(server-start)
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("7e78a1030293619094ea6ae80a7579a562068087080e01c2b8b503b27900165c" "af4dc574b2f96f5345d55b98af024e2db9b9bbf1872b3132bc66dffbf5e1ba1d" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" default)))
- '(package-selected-packages
-   (quote
-    (django-theme magithub markdown-preview-mode markdown-mode flycheck web-mode vue-mode treemacs spaceline solaire-mode smartparens rjsx-mode rainbow-delimiters pipenv org-pomodoro org-journal org-bullets nyan-mode neotree magit lua-mode graphql-mode exec-path-from-shell emmet-mode elscreen elpy editorconfig doom-themes dashboard counsel-projectile color-theme-sanityinc-tomorrow better-defaults autothemer auto-complete))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(org-link ((t (:inherit link :foreground "white" :underline "white")))))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (org-journal org-pomodoro org-bullets tide rjsx-mode js2-mode web-mode emmet-mode yasnippet company counsel-projectile counsel magit elscreen ace-window smartparens rainbow-delimiters nyan-mode solaire-mode doom-themes use-package))))

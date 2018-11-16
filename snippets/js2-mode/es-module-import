@@ -1,0 +1,5 @@
+# key: imp
+# name: Import ES6+ Module
+# contributor: Sean Brage
+# --
+import ${1:ExportedItem} from \'${2:Module}\'

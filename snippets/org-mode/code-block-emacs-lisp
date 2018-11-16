@@ -1,0 +1,7 @@
+# key: scbel
+# name: Embedded Source Code Block - Emacs Lisp
+# contributor: Sean Brage
+# --
+#+BEGIN_SRC emacs-lisp
+  $1
+#+END_SRC
