@@ -42,6 +42,7 @@ excellent config files]] for providing inspiration and direction.
 
 *** Font & Typefaces
 #+BEGIN_SRC emacs-lisp
+;; Iosevka font installed via Homebrew on macOS
 (set-face-attribute 'default nil
                     :family "Iosevka Medium"
                     :height 140
@@ -50,6 +51,7 @@ excellent config files]] for providing inspiration and direction.
 
 *** Theme
 #+BEGIN_SRC emacs-lisp
+;; doom-themes is an excellent collection of emacs themes
 (use-package doom-themes
   :ensure t
   :defer t
