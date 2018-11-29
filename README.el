@@ -1,3 +1,7 @@
+(use-package exec-path-from-shell
+  :ensure t
+  :init (exec-path-from-shell-initialize))
+
 ;; Change 'yes or no' options to 'y or n'
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -13,6 +17,9 @@
 ;; Start the server (for opening files from external sources in the current Emacs instance)
 (server-start)
 
+;; use ibuffer by default
+(defalias 'list-buffers 'ibuffer)
+
 ;; Set a decent window size:
 (add-to-list 'default-frame-alist '(height . 64))
 (add-to-list 'default-frame-alist '(width . 180))
@@ -22,17 +29,18 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
+;; Iosevka font installed via Homebrew on macOS
 (set-face-attribute 'default nil
-                    :family "Iosevka Medium"
-                    :height 140
+                    :family "Fira Code"
+                    :height 150
                     :width 'normal)
 
+;; doom-themes is an excellent collection of emacs themes
 (use-package doom-themes
   :ensure t
   :defer t
   :init 
-  (load-theme 'doom-Iosvkem t)
-  (setq doom-Iosvkem-brighter-modeline t))
+  (load-theme 'doom-dracula t))
 
 (use-package solaire-mode
   :ensure t
@@ -150,6 +158,12 @@
   (setq-default web-mode-code-indent-offset 2))
 
 (setq-default css-indent-offset 2)
+
+(use-package vue-mode
+  :ensure t
+  :config
+  ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
+  (setq mmm-submode-decoration-level 0))
 
 (use-package js2-mode
   :ensure t

@@ -10,6 +10,16 @@ greatest text format. Many thanks go to Andrew Jarrett and [[https://github.com/
 excellent config files]] for providing inspiration and direction.
 
 * Init
+** Exec Path From Shell
+Many Emacs packages make use of tools like the_silver_searcher, git,
+grep, etc. These tools might not be available to Emacs by default, so
+I like to use the package [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]], which makes Emacs use
+my $PATH.
+#+BEGIN_SRC emacs-lisp
+(use-package exec-path-from-shell
+  :ensure t
+  :init (exec-path-from-shell-initialize))
+#+END_SRC
 ** File Settings
 #+BEGIN_SRC emacs-lisp
 ;; Change 'yes or no' options to 'y or n'
@@ -26,6 +36,16 @@ excellent config files]] for providing inspiration and direction.
 
 ;; Start the server (for opening files from external sources in the current Emacs instance)
 (server-start)
+#+END_SRC
+** Buffer Settings
+*** ibuffer
+The default buffer list is somewhat lacking IMO. Particularly, it
+doesn't play nicely with split windows, and presents a /very/
+barebones set of information. That's all well and fine, but Emacs also
+ships with ibuffer-mode, which is just better IMO.
+#+BEGIN_SRC emacs-lisp
+;; use ibuffer by default
+(defalias 'list-buffers 'ibuffer)
 #+END_SRC
 ** GUI Settings
 *** Frame and Window Settings
@@ -44,8 +64,8 @@ excellent config files]] for providing inspiration and direction.
 #+BEGIN_SRC emacs-lisp
 ;; Iosevka font installed via Homebrew on macOS
 (set-face-attribute 'default nil
-                    :family "Iosevka Medium"
-                    :height 140
+                    :family "Fira Code"
+                    :height 150
                     :width 'normal)
 #+END_SRC
 
@@ -56,8 +76,7 @@ excellent config files]] for providing inspiration and direction.
   :ensure t
   :defer t
   :init 
-  (load-theme 'doom-Iosvkem t)
-  (setq doom-Iosvkem-brighter-modeline t))
+  (load-theme 'doom-dracula t))
 #+END_SRC
 
 *** Solaire Mode
@@ -228,6 +247,16 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
 #+END_SRC
 
 ** JavaScript
+*** VueJS
+I love Vue. It's the best around. Let's make Emacs play nicely with
+it.
+#+BEGIN_SRC emacs-lisp
+(use-package vue-mode
+  :ensure t
+  :config
+  ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
+  (setq mmm-submode-decoration-level 0))
+#+END_SRC
 *** JS2-Mode
 JS2-Mode is the preferred major mode for working with JavaScript files. It's not perfect, but it's good.
 #+BEGIN_SRC emacs-lisp
@@ -278,6 +307,16 @@ Tide provides a TypeScript IDE-like experience in Emacs. Even if you aren't work
     (add-hook 'rjsx-mode-hook #'setup-tide-mode)
     (add-hook 'js2-mode-hook #'setup-tide-mode))
 #+END_SRC
+* Python
+Python is the back-end language used at my workplace, so while my
+Python experience is still limited, I'm learning and trying to do
+everything in Emacs.
+** Jedi
+According to [[http://tkf.github.io/emacs-jedi/latest/][the Jedi website]], Jedi is "a Python auto-completion
+package for Emacs". Just how much value Jedi adds remains to be seen,
+but when I google "python auto-complete emacs", Jedi tends to pop up
+frequently.
+
 * Org Mode
 Org Mode is why you should /start/ using Emacs. This is how I like my config:
 
