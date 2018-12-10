@@ -1,7 +1,6 @@
 #+TITLE: Emacs.d
 #+AUTHOR: Sean Brage
 #+EMAIL: seanmbrage@me.com
-
 * My Emacs Configuration
 
 This is an attempt at creating a more readable and extensible Emacs
@@ -10,6 +9,17 @@ greatest text format. Many thanks go to Andrew Jarrett and [[https://github.com/
 excellent config files]] for providing inspiration and direction.
 
 * Init
+** Better Defaults
+Better defaults provides some very nice quality-of-life improvements
+over the "stock" Emacs experience. You can [[https://github.com/technomancy/better-defaults][read more about the package
+here.]]
+#+BEGIN_SRC emacs-lisp
+(use-package better-defaults
+  :ensure t
+  :init 
+  (require 'better-defaults)
+  (setq ring-bell-function 'ignore))
+#+END_SRC
 ** Exec Path From Shell
 Many Emacs packages make use of tools like the_silver_searcher, git,
 grep, etc. These tools might not be available to Emacs by default, so
@@ -30,9 +40,6 @@ my $PATH.
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
 (setq inhibit-startup-message t)
-
-;; gimme line numbers
-(global-linum-mode t)
 
 ;; Start the server (for opening files from external sources in the current Emacs instance)
 (server-start)
@@ -62,7 +69,7 @@ ships with ibuffer-mode, which is just better IMO.
 
 *** Font & Typefaces
 #+BEGIN_SRC emacs-lisp
-;; Iosevka font installed via Homebrew on macOS
+;; Fira Code font installed via Homebrew on macOS
 (set-face-attribute 'default nil
                     :family "Fira Code"
                     :height 150
@@ -71,36 +78,18 @@ ships with ibuffer-mode, which is just better IMO.
 
 *** Theme
 #+BEGIN_SRC emacs-lisp
-;; doom-themes is an excellent collection of emacs themes
-(use-package doom-themes
+(use-package ample-theme
   :ensure t
-  :defer t
-  :init 
-  (load-theme 'doom-dracula t))
+  :init (load-theme 'ample t))
 #+END_SRC
-
-*** Solaire Mode
+*** Mode Line Enhancement
+**** Awesome Tray
+Giving the [[https://github.com/manateelazycat/awesome-tray][awesome-tray]] package a go as of December 10, 2018. Would
+like to reduce overall visual noise in Emacs. (Says the guy using nyan-mode.)
 #+BEGIN_SRC emacs-lisp
-(use-package solaire-mode
-  :ensure t
-  :defer t
-  :init
-  ;; brighten buffers (that represent real files)
-  (add-hook 'change-major-mode-hook #'turn-on-solaire-mode)
-  ;; To enable solaire-mode unconditionally for certain modes:
-  (add-hook 'ediff-prepare-buffer-hook #'solaire-mode)
-  ;; ...if you use auto-revert-mode, this prevents solaire-mode from turning
-  ;; itself off every time Emacs reverts the file
-  (add-hook 'after-revert-hook #'turn-on-solaire-mode)
-  ;; highlight the minibuffer when it is activated:
-  (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
-  ;; if the bright and dark background colors are the wrong way around, use this
-  ;; to switch the backgrounds of the `default` and `solaire-default-face` faces.
-  ;; This should be used *after* you load the active theme!
-  ;; NOTE: This is necessary for themes in the doom-themes package!
-  (solaire-mode-swap-bg))
+(require 'awesome-tray)
+(awesome-tray-mode 1)
 #+END_SRC
-
 *** Very Important Settings
 #+BEGIN_SRC emacs-lisp
 (use-package nyan-mode
@@ -199,12 +188,15 @@ Projectile makes it really easy to get around different projects and repos.
 #+END_SRC
 
 ** Company Mode
-Company mode seems to still be the more broadly-used autocompletion library for emacs, so as much as I like auto-complete, we will stick with company for now.
+   Company mode seems to still be the more broadly-used autocompletion library for emacs, so as much as I like auto-complete, we will stick with company for now.
 #+BEGIN_SRC emacs-lisp
 (use-package company
   :ensure t
   :defer t
-  :init (global-company-mode 1))
+  :init 
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 2)
+  (global-company-mode 1))
 #+END_SRC
 
 ** Snippets
@@ -253,6 +245,8 @@ it.
 #+BEGIN_SRC emacs-lisp
 (use-package vue-mode
   :ensure t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
   :config
   ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
   (setq mmm-submode-decoration-level 0))
@@ -311,12 +305,22 @@ Tide provides a TypeScript IDE-like experience in Emacs. Even if you aren't work
 Python is the back-end language used at my workplace, so while my
 Python experience is still limited, I'm learning and trying to do
 everything in Emacs.
-** Jedi
-According to [[http://tkf.github.io/emacs-jedi/latest/][the Jedi website]], Jedi is "a Python auto-completion
-package for Emacs". Just how much value Jedi adds remains to be seen,
-but when I google "python auto-complete emacs", Jedi tends to pop up
-frequently.
 
+** Anaconda Mode
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+** Pipenv
+Pipenv is, for better or worse, the "official" standard for working in
+Python virtual environments.
+#+BEGIN_SRC emacs-lisp
+(use-package pipenv
+  :hook (python-mode . pipenv-mode)
+  :init
+  (setq
+   pipenv-projectile-after-switch-function
+   #'pipenv-projectile-after-switch-extended))
+#+END_SRC
 * Org Mode
 Org Mode is why you should /start/ using Emacs. This is how I like my config:
 

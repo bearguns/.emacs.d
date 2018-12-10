@@ -1,3 +1,9 @@
+(use-package better-defaults
+  :ensure t
+  :init 
+  (require 'better-defaults)
+  (setq ring-bell-function 'ignore))
+
 (use-package exec-path-from-shell
   :ensure t
   :init (exec-path-from-shell-initialize))
@@ -10,9 +16,6 @@
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
 (setq inhibit-startup-message t)
-
-;; gimme line numbers
-(global-linum-mode t)
 
 ;; Start the server (for opening files from external sources in the current Emacs instance)
 (server-start)
@@ -29,37 +32,18 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
-;; Iosevka font installed via Homebrew on macOS
+;; Fira Code font installed via Homebrew on macOS
 (set-face-attribute 'default nil
                     :family "Fira Code"
                     :height 150
                     :width 'normal)
 
-;; doom-themes is an excellent collection of emacs themes
-(use-package doom-themes
+(use-package ample-theme
   :ensure t
-  :defer t
-  :init 
-  (load-theme 'doom-dracula t))
+  :init (load-theme 'ample t))
 
-(use-package solaire-mode
-  :ensure t
-  :defer t
-  :init
-  ;; brighten buffers (that represent real files)
-  (add-hook 'change-major-mode-hook #'turn-on-solaire-mode)
-  ;; To enable solaire-mode unconditionally for certain modes:
-  (add-hook 'ediff-prepare-buffer-hook #'solaire-mode)
-  ;; ...if you use auto-revert-mode, this prevents solaire-mode from turning
-  ;; itself off every time Emacs reverts the file
-  (add-hook 'after-revert-hook #'turn-on-solaire-mode)
-  ;; highlight the minibuffer when it is activated:
-  (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
-  ;; if the bright and dark background colors are the wrong way around, use this
-  ;; to switch the backgrounds of the `default` and `solaire-default-face` faces.
-  ;; This should be used *after* you load the active theme!
-  ;; NOTE: This is necessary for themes in the doom-themes package!
-  (solaire-mode-swap-bg))
+(require 'awesome-tray)
+(awesome-tray-mode 1)
 
 (use-package nyan-mode
   :ensure t
@@ -133,7 +117,10 @@
 (use-package company
   :ensure t
   :defer t
-  :init (global-company-mode 1))
+  :init 
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 2)
+  (global-company-mode 1))
 
 (use-package yasnippet
   :ensure t
@@ -161,6 +148,8 @@
 
 (use-package vue-mode
   :ensure t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
   :config
   ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
   (setq mmm-submode-decoration-level 0))
@@ -202,6 +191,15 @@
     (company-mode +1))
     (add-hook 'rjsx-mode-hook #'setup-tide-mode)
     (add-hook 'js2-mode-hook #'setup-tide-mode))
+
+
+
+(use-package pipenv
+  :hook (python-mode . pipenv-mode)
+  :init
+  (setq
+   pipenv-projectile-after-switch-function
+   #'pipenv-projectile-after-switch-extended))
 
 ;; store org files in Dropbox
 (setq-default org-directory "~/Dropbox/org")
