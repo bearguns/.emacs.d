@@ -78,9 +78,9 @@ ships with ibuffer-mode, which is just better IMO.
 
 *** Theme
 #+BEGIN_SRC emacs-lisp
-(use-package ample-theme
+(use-package dracula-theme
   :ensure t
-  :init (load-theme 'ample t))
+  :init (load-theme 'dracula t))
 #+END_SRC
 *** Mode Line Enhancement
 **** Awesome Tray
