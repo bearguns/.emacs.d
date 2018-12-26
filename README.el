@@ -38,12 +38,9 @@
                     :height 150
                     :width 'normal)
 
-(use-package ample-theme
+(use-package dracula-theme
   :ensure t
-  :init (load-theme 'ample t))
-
-(require 'awesome-tray)
-(awesome-tray-mode 1)
+  :init (load-theme 'dracula t))
 
 (use-package nyan-mode
   :ensure t
@@ -71,11 +68,6 @@
   :ensure t
   :defer t
   :init (global-set-key (kbd "M-o") 'ace-window))
-
-(use-package elscreen
-  :ensure t
-  :defer t
-  :init (elscreen-start))
 
 (use-package magit
   :ensure t

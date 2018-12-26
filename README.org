@@ -82,14 +82,6 @@ ships with ibuffer-mode, which is just better IMO.
   :ensure t
   :init (load-theme 'dracula t))
 #+END_SRC
-*** Mode Line Enhancement
-**** Awesome Tray
-Giving the [[https://github.com/manateelazycat/awesome-tray][awesome-tray]] package a go as of December 10, 2018. Would
-like to reduce overall visual noise in Emacs. (Says the guy using nyan-mode.)
-#+BEGIN_SRC emacs-lisp
-(require 'awesome-tray)
-(awesome-tray-mode 1)
-#+END_SRC
 *** Very Important Settings
 #+BEGIN_SRC emacs-lisp
 (use-package nyan-mode
@@ -130,15 +122,6 @@ Ace Window provides easy shortcuts for moving between split panes in Emacs, so l
   :defer t
   :init (global-set-key (kbd "M-o") 'ace-window))
 #+END_SRC
-**** Elscreen
-Elscreen provides a tmux-like environment to Emacs, allowing for multiple "sessions" of splits and buffers.
-#+BEGIN_SRC emacs-lisp
-(use-package elscreen
-  :ensure t
-  :defer t
-  :init (elscreen-start))
-#+END_SRC
-
 * Programming
 ** Magit
 Magit is one of those, "switch to Emacs just so you can use..." packages. The only other Git interface that comes /close/ is Visual Studio Code, but you can't run that in emacs (yet).
