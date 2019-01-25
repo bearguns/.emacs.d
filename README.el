@@ -8,6 +8,10 @@
   :ensure t
   :init (exec-path-from-shell-initialize))
 
+(use-package treemacs
+  :ensure t
+)
+
 ;; Change 'yes or no' options to 'y or n'
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -32,15 +36,35 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
-;; Fira Code font installed via Homebrew on macOS
+;; DejaVu Sans Mono Nerd font installed via Homebrew on macOS
 (set-face-attribute 'default nil
-                    :family "Fira Code"
+                    :family "DejaVuSansMono Nerd Font"
                     :height 150
                     :width 'normal)
 
-(use-package dracula-theme
-  :ensure t
-  :init (load-theme 'dracula t))
+(use-package doom-themes
+:ensure t
+:config 
+;; Global settings (defaults)
+(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+doom-themes-enable-italic nil) ; if nil, italics is universally disabled
+;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
+;; may have their own settings.
+(load-theme 'doom-one t)
+;; Enable flashing mode-line on errors
+(doom-themes-visual-bell-config)
+;; or for treemacs users
+(doom-themes-treemacs-config)
+;; Corrects (and improves) org-mode's native fontification.
+(doom-themes-org-config))
+
+(use-package powerline
+:ensure t
+:config (powerline-default-theme))
+
+(use-package airline-themes
+:ensure t
+:config (load-theme 'airline-doom-one))
 
 (use-package nyan-mode
   :ensure t
@@ -68,6 +92,11 @@
   :ensure t
   :defer t
   :init (global-set-key (kbd "M-o") 'ace-window))
+
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
 
 (use-package magit
   :ensure t
@@ -152,46 +181,6 @@
   (setq-default js2-basic-offset 2)
   (setq-default js2-strict-missing-semi-warning nil)
   (setq-default js-indent-level 2))
-
-;; Install tern by cloning the tern repo into the location of your choosing. I've chosen /usr/local/bin/tern
-;; once cloned, you need to npm install inside the tern directory
-;; tern down for what
-(add-to-list 'load-path "/usr/local/bin/tern/emacs/")
-(autoload 'tern-mode "tern.el" nil t)
-(add-hook 'js-mode-hook (lambda () (tern-mode t)))
-(add-hook 'rjsx-mode-hook (lambda () (tern-mode t)))
-
-(use-package rjsx-mode
-  :ensure t
-  :init
-  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
-  (add-to-list 'auto-mode-alist '("pages\\/.*\\.js\\'" . rjsx-mode)))
-
-(use-package tide
-  :ensure t
-  :init
-  (defun setup-tide-mode ()
-    (interactive)
-    (tide-setup)
-    (flycheck-mode +1)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-    (eldoc-mode +1)
-    (tide-hl-identifier-mode +1)
-    ;; company is an optional dependency. You have to
-    ;; install it separately via package-install
-    ;; `M-x package-install [ret] company`
-    (company-mode +1))
-    (add-hook 'rjsx-mode-hook #'setup-tide-mode)
-    (add-hook 'js2-mode-hook #'setup-tide-mode))
-
-
-
-(use-package pipenv
-  :hook (python-mode . pipenv-mode)
-  :init
-  (setq
-   pipenv-projectile-after-switch-function
-   #'pipenv-projectile-after-switch-extended))
 
 ;; store org files in Dropbox
 (setq-default org-directory "~/Dropbox/org")

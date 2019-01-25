@@ -12,3 +12,4 @@ init.el~
 bookmarks
 ("recentf~")
 recentf~
+.cache/

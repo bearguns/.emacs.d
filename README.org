@@ -30,6 +30,15 @@ my $PATH.
   :ensure t
   :init (exec-path-from-shell-initialize))
 #+END_SRC
+** Tree Navigation
+I've been getting on without Neotree for a while, but learning a new
+codebase at work has made me realize that a tree-based navigation
+system can be helpful. I'm giving Treemacs a whirl.
+#+BEGIN_SRC emacs-lisp
+(use-package treemacs
+  :ensure t
+)
+#+END_SRC
 ** File Settings
 #+BEGIN_SRC emacs-lisp
 ;; Change 'yes or no' options to 'y or n'
@@ -69,18 +78,42 @@ ships with ibuffer-mode, which is just better IMO.
 
 *** Font & Typefaces
 #+BEGIN_SRC emacs-lisp
-;; Fira Code font installed via Homebrew on macOS
+;; DejaVu Sans Mono Nerd font installed via Homebrew on macOS
 (set-face-attribute 'default nil
-                    :family "Fira Code"
+                    :family "DejaVuSansMono Nerd Font"
                     :height 150
                     :width 'normal)
 #+END_SRC
 
 *** Theme
 #+BEGIN_SRC emacs-lisp
-(use-package dracula-theme
-  :ensure t
-  :init (load-theme 'dracula t))
+(use-package doom-themes
+:ensure t
+:config 
+;; Global settings (defaults)
+(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+doom-themes-enable-italic nil) ; if nil, italics is universally disabled
+;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
+;; may have their own settings.
+(load-theme 'doom-one t)
+;; Enable flashing mode-line on errors
+(doom-themes-visual-bell-config)
+;; or for treemacs users
+(doom-themes-treemacs-config)
+;; Corrects (and improves) org-mode's native fontification.
+(doom-themes-org-config))
+#+END_SRC
+*** Modeline
+#+BEGIN_SRC emacs-lisp
+(use-package powerline
+:ensure t
+:config (powerline-default-theme))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package airline-themes
+:ensure t
+:config (load-theme 'airline-doom-one))
 #+END_SRC
 *** Very Important Settings
 #+BEGIN_SRC emacs-lisp
@@ -123,6 +156,18 @@ Ace Window provides easy shortcuts for moving between split panes in Emacs, so l
   :init (global-set-key (kbd "M-o") 'ace-window))
 #+END_SRC
 * Programming
+** Editorconfig
+Editorconfig ([[https://editorconfig.org/][editorconfig.org]]) is a wonderful tool for ensuring
+project-wide consistency across editors and IDEs. Basically, it lets a
+team easily enforce spacing, tabs, semicolon, final-lines, and other
+fiddly rules.
+
+#+BEGIN_SRC emacs-lisp
+(use-package editorconfig
+  :ensure t
+  :config
+  (editorconfig-mode 1))
+#+END_SRC
 ** Magit
 Magit is one of those, "switch to Emacs just so you can use..." packages. The only other Git interface that comes /close/ is Visual Studio Code, but you can't run that in emacs (yet).
 #+BEGIN_SRC emacs-lisp
@@ -244,66 +289,7 @@ JS2-Mode is the preferred major mode for working with JavaScript files. It's not
   (setq-default js2-strict-missing-semi-warning nil)
   (setq-default js-indent-level 2))
 #+END_SRC
-*** TernJS
-TernJS is like MSFT's "Intellisense" for JavaScript, only not bound inside of a Visual Studio editor.
-#+BEGIN_SRC emacs-lisp
-;; Install tern by cloning the tern repo into the location of your choosing. I've chosen /usr/local/bin/tern
-;; once cloned, you need to npm install inside the tern directory
-;; tern down for what
-(add-to-list 'load-path "/usr/local/bin/tern/emacs/")
-(autoload 'tern-mode "tern.el" nil t)
-(add-hook 'js-mode-hook (lambda () (tern-mode t)))
-(add-hook 'rjsx-mode-hook (lambda () (tern-mode t)))
-#+END_SRC
-*** RJSX Mode
-RJSX mode provides a very nice experience working with React.js and JSX markup. It also extends js2-mode, providing a rich JavaScript environment in JS/JSX files.
-#+BEGIN_SRC emacs-lisp
-(use-package rjsx-mode
-  :ensure t
-  :init
-  (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
-  (add-to-list 'auto-mode-alist '("pages\\/.*\\.js\\'" . rjsx-mode)))
-#+END_SRC
-*** Tide
-Tide provides a TypeScript IDE-like experience in Emacs. Even if you aren't working in TS files, Tide gives you many great benefits.
-#+BEGIN_SRC emacs-lisp
-(use-package tide
-  :ensure t
-  :init
-  (defun setup-tide-mode ()
-    (interactive)
-    (tide-setup)
-    (flycheck-mode +1)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-    (eldoc-mode +1)
-    (tide-hl-identifier-mode +1)
-    ;; company is an optional dependency. You have to
-    ;; install it separately via package-install
-    ;; `M-x package-install [ret] company`
-    (company-mode +1))
-    (add-hook 'rjsx-mode-hook #'setup-tide-mode)
-    (add-hook 'js2-mode-hook #'setup-tide-mode))
-#+END_SRC
-* Python
-Python is the back-end language used at my workplace, so while my
-Python experience is still limited, I'm learning and trying to do
-everything in Emacs.
 
-** Anaconda Mode
-#+BEGIN_SRC emacs-lisp
-
-#+END_SRC
-** Pipenv
-Pipenv is, for better or worse, the "official" standard for working in
-Python virtual environments.
-#+BEGIN_SRC emacs-lisp
-(use-package pipenv
-  :hook (python-mode . pipenv-mode)
-  :init
-  (setq
-   pipenv-projectile-after-switch-function
-   #'pipenv-projectile-after-switch-extended))
-#+END_SRC
 * Org Mode
 Org Mode is why you should /start/ using Emacs. This is how I like my config:
 
