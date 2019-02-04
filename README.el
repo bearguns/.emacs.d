@@ -36,35 +36,21 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
-;; DejaVu Sans Mono Nerd font installed via Homebrew on macOS
+;; Source Code Pro font installed via Homebrew on macOS
 (set-face-attribute 'default nil
-                    :family "DejaVuSansMono Nerd Font"
-                    :height 150
-                    :width 'normal)
+                    :family "Source Code Pro"
+                    :height 140)
 
-(use-package doom-themes
-:ensure t
-:config 
-;; Global settings (defaults)
-(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-doom-themes-enable-italic nil) ; if nil, italics is universally disabled
-;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
-;; may have their own settings.
-(load-theme 'doom-one t)
-;; Enable flashing mode-line on errors
-(doom-themes-visual-bell-config)
-;; or for treemacs users
-(doom-themes-treemacs-config)
-;; Corrects (and improves) org-mode's native fontification.
-(doom-themes-org-config))
+(use-package spacemacs-common
+  :ensure spacemacs-theme
+  :config
+  (load-theme 'spacemacs-dark t)
+  (setq spacemacs-theme-org-agenda-height nil)
+  (setq spacemacs-theme-org-height nil))
 
 (use-package powerline
 :ensure t
 :config (powerline-default-theme))
-
-(use-package airline-themes
-:ensure t
-:config (load-theme 'airline-doom-one))
 
 (use-package nyan-mode
   :ensure t
