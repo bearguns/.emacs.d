@@ -21,9 +21,6 @@
 (setq create-lockfiles nil)
 (setq inhibit-startup-message t)
 
-;; Start the server (for opening files from external sources in the current Emacs instance)
-(server-start)
-
 ;; use ibuffer by default
 (defalias 'list-buffers 'ibuffer)
 
@@ -41,12 +38,10 @@
                     :family "Source Code Pro"
                     :height 140)
 
-(use-package spacemacs-common
-  :ensure spacemacs-theme
+(use-package material-theme
+  :ensure
   :config
-  (load-theme 'spacemacs-dark t)
-  (setq spacemacs-theme-org-agenda-height nil)
-  (setq spacemacs-theme-org-height nil))
+  (load-theme 'material t))
 
 (use-package powerline
 :ensure t
@@ -62,9 +57,13 @@
   (setq-default nyan-wavy-trail t))
 
 (use-package rainbow-delimiters
-  :ensure t
-  :init
-  (rainbow-delimiters-mode))
+  :ensure
+  :config
+  (add-hook 'web-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'js-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'org-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'python-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'vue-mode-hook #'rainbow-delimiters-mode))
 
 (use-package smartparens
   :ensure t
@@ -72,7 +71,12 @@
   :init
   (require 'smartparens-config)
   ;; use smartparens everywhere
-  (smartparens-global-mode 1))
+  (add-hook 'web-mode-hook #'smartparens-mode)
+  (add-hook 'js-mode-hook #'smartparens-mode)
+  (add-hook 'org-mode-hook #'smartparens-mode)
+  (add-hook 'python-mode-hook #'smartparens-mode)
+  (add-hook 'vue-mode-hook #'smartparens-mode)
+  (add-hook 'lisp-mode-hook #'smartparens-mode))
 
 (use-package ace-window
   :ensure t
@@ -101,7 +105,7 @@
   (global-set-key (kbd "C-c k") 'counsel-ag)
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  (global-set-key (kbd "C-s") 'swiper)
+  ;;(global-set-key (kbd "C-s") 'swiper)
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (global-set-key (kbd "<f1> f") 'counsel-describe-function)
@@ -127,7 +131,11 @@
   :init 
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 2)
-  (global-company-mode 1))
+  (add-hook 'lisp-mode-hook #'company-mode)
+  (add-hook 'web-mode-hook #'company-mode)
+  (add-hook 'js-mode-hook #'company-mode)
+  (add-hook 'python-mode-hook #'company-mode)
+  (add-hook 'vue-mode-hook #'company-mode))
 
 (use-package yasnippet
   :ensure t
@@ -145,6 +153,7 @@
 (use-package web-mode
   :ensure t
   :init
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (setq-default web-mode-enable-auto-pairing t)
   (setq-default web-mode-enable-auto-closing t)
   (setq-default web-mode-markup-indent-offset 2)
@@ -156,17 +165,10 @@
 (use-package vue-mode
   :ensure t
   :init
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mmm-mode))
   :config
   ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
   (setq mmm-submode-decoration-level 0))
-
-(use-package js2-mode
-  :ensure t
-  :init
-  (setq-default js2-basic-offset 2)
-  (setq-default js2-strict-missing-semi-warning nil)
-  (setq-default js-indent-level 2))
 
 ;; store org files in Dropbox
 (setq-default org-directory "~/Dropbox/org")

@@ -30,16 +30,7 @@ my $PATH.
   :ensure t
   :init (exec-path-from-shell-initialize))
 #+END_SRC
-** Tree Navigation
-I've been getting on without Neotree for a while, but learning a new
-codebase at work has made me realize that a tree-based navigation
-system can be helpful. I'm giving Treemacs a whirl.
-#+BEGIN_SRC emacs-lisp
-(use-package treemacs
-  :ensure t
-)
-#+END_SRC
-** File Settings
+** I/O Settings
 #+BEGIN_SRC emacs-lisp
 ;; Change 'yes or no' options to 'y or n'
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -49,9 +40,6 @@ system can be helpful. I'm giving Treemacs a whirl.
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
 (setq inhibit-startup-message t)
-
-;; Start the server (for opening files from external sources in the current Emacs instance)
-(server-start)
 #+END_SRC
 ** Buffer Settings
 *** ibuffer
@@ -86,12 +74,10 @@ ships with ibuffer-mode, which is just better IMO.
 
 *** Theme
 #+BEGIN_SRC emacs-lisp
-(use-package spacemacs-common
-  :ensure spacemacs-theme
+(use-package material-theme
+  :ensure
   :config
-  (load-theme 'spacemacs-dark t)
-  (setq spacemacs-theme-org-agenda-height nil)
-  (setq spacemacs-theme-org-height nil))
+  (load-theme 'material t))
 #+END_SRC
 *** Modeline
 #+BEGIN_SRC emacs-lisp
@@ -115,9 +101,13 @@ ships with ibuffer-mode, which is just better IMO.
 *** Rainbow Delimiters
 #+BEGIN_SRC emacs-lisp
 (use-package rainbow-delimiters
-  :ensure t
-  :init
-  (rainbow-delimiters-mode))
+  :ensure
+  :config
+  (add-hook 'web-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'js-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'org-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'python-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'vue-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
 
 *** Smart Parens
@@ -128,7 +118,12 @@ ships with ibuffer-mode, which is just better IMO.
   :init
   (require 'smartparens-config)
   ;; use smartparens everywhere
-  (smartparens-global-mode 1))
+  (add-hook 'web-mode-hook #'smartparens-mode)
+  (add-hook 'js-mode-hook #'smartparens-mode)
+  (add-hook 'org-mode-hook #'smartparens-mode)
+  (add-hook 'python-mode-hook #'smartparens-mode)
+  (add-hook 'vue-mode-hook #'smartparens-mode)
+  (add-hook 'lisp-mode-hook #'smartparens-mode))
 #+END_SRC
 *** Window Management
 **** Ace Window
@@ -174,7 +169,7 @@ Magit is one of those, "switch to Emacs just so you can use..." packages. The on
   (global-set-key (kbd "C-c k") 'counsel-ag)
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  (global-set-key (kbd "C-s") 'swiper)
+  ;;(global-set-key (kbd "C-s") 'swiper)
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (global-set-key (kbd "<f1> f") 'counsel-describe-function)
@@ -208,7 +203,11 @@ Projectile makes it really easy to get around different projects and repos.
   :init 
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 2)
-  (global-company-mode 1))
+  (add-hook 'lisp-mode-hook #'company-mode)
+  (add-hook 'web-mode-hook #'company-mode)
+  (add-hook 'js-mode-hook #'company-mode)
+  (add-hook 'python-mode-hook #'company-mode)
+  (add-hook 'vue-mode-hook #'company-mode))
 #+END_SRC
 
 ** Snippets
@@ -238,6 +237,7 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
 (use-package web-mode
   :ensure t
   :init
+  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (setq-default web-mode-enable-auto-pairing t)
   (setq-default web-mode-enable-auto-closing t)
   (setq-default web-mode-markup-indent-offset 2)
@@ -258,22 +258,11 @@ it.
 (use-package vue-mode
   :ensure t
   :init
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+  (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mmm-mode))
   :config
   ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
   (setq mmm-submode-decoration-level 0))
 #+END_SRC
-*** JS2-Mode
-JS2-Mode is the preferred major mode for working with JavaScript files. It's not perfect, but it's good.
-#+BEGIN_SRC emacs-lisp
-(use-package js2-mode
-  :ensure t
-  :init
-  (setq-default js2-basic-offset 2)
-  (setq-default js2-strict-missing-semi-warning nil)
-  (setq-default js-indent-level 2))
-#+END_SRC
-
 * Org Mode
 Org Mode is why you should /start/ using Emacs. This is how I like my config:
 
@@ -305,10 +294,4 @@ Pomodoro timers are the best way I know of to get into a good work flow. Now, yo
   :ensure t
   :init (require 'org-pomodoro))
 #+END_SRC
-** Org Journal
-Org Journal is a package for quickly creating journal entries using org-mode.
-#+BEGIN_SRC emacs-lisp
-(use-package org-journal
-  :ensure t
-  :init (setq-default org-journal-dir "~/Dropbox/org"))
-#+END_SRC
+
