@@ -8,10 +8,6 @@
   :ensure t
   :init (exec-path-from-shell-initialize))
 
-(use-package treemacs
-  :ensure t
-)
-
 ;; Change 'yes or no' options to 'y or n'
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -189,7 +185,3 @@
 (use-package org-pomodoro
   :ensure t
   :init (require 'org-pomodoro))
-
-(use-package org-journal
-  :ensure t
-  :init (setq-default org-journal-dir "~/Dropbox/org"))
