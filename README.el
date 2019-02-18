@@ -1,12 +1,15 @@
-(use-package better-defaults
-  :ensure t
-  :init 
-  (require 'better-defaults)
-  (setq ring-bell-function 'ignore))
+;; Remove os GUI stuff, it's ugly
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
 
-(use-package exec-path-from-shell
-  :ensure t
-  :init (exec-path-from-shell-initialize))
+;; load atom-one-dark theme
+(use-package atom-one-dark-theme
+:init (load-theme 'atom-one-dark t))
+
+(set-face-attribute 'default nil
+                    :family "Menlo"
+                    :height 140)
 
 ;; Change 'yes or no' options to 'y or n'
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -20,74 +23,36 @@
 ;; use ibuffer by default
 (defalias 'list-buffers 'ibuffer)
 
-;; Set a decent window size:
-(add-to-list 'default-frame-alist '(height . 64))
-(add-to-list 'default-frame-alist '(width . 180))
+(use-package magit
+  :ensure t
+  :defer t
+  :init (global-set-key (kbd "C-x g") 'magit-status))
 
-;; Remove os GUI stuff, it's ugly
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-
-;; Source Code Pro font installed via Homebrew on macOS
-(set-face-attribute 'default nil
-                    :family "Source Code Pro"
-                    :height 140)
-
-(use-package material-theme
-  :ensure
-  :config
-  (load-theme 'material t))
-
-(use-package powerline
-:ensure t
-:config (powerline-default-theme))
-
-(use-package nyan-mode
+(use-package projectile
   :ensure t
   :defer t
   :init
-  (add-hook 'nyan-mode-hook 'nyan-start-animation)
-  (add-hook 'after-init-hook 'nyan-mode 1)
-  (setq-default nyan-animate-nyancat t)
-  (setq-default nyan-wavy-trail t))
-
-(use-package rainbow-delimiters
-  :ensure
-  :config
-  (add-hook 'web-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'js-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'org-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'python-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'vue-mode-hook #'rainbow-delimiters-mode))
+  (projectile-mode 1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package smartparens
-  :ensure t
-  :defer t
-  :init
+  :init 
   (require 'smartparens-config)
-  ;; use smartparens everywhere
-  (add-hook 'web-mode-hook #'smartparens-mode)
-  (add-hook 'js-mode-hook #'smartparens-mode)
-  (add-hook 'org-mode-hook #'smartparens-mode)
-  (add-hook 'python-mode-hook #'smartparens-mode)
-  (add-hook 'vue-mode-hook #'smartparens-mode)
-  (add-hook 'lisp-mode-hook #'smartparens-mode))
+  (add-hook 'lisp-mode-hook #'smartparens-mode)
+  (add-hook 'web-mode-hook #'smartparents-strict-mode)
+  (add-hook 'js-mode-hook #'smartparens-strict-mode))
 
-(use-package ace-window
-  :ensure t
-  :defer t
-  :init (global-set-key (kbd "M-o") 'ace-window))
+(use-package rainbow-delimiters
+  :init
+  (add-hook 'web-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'js-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'org-mode-hook #'rainbow-delimiters-mode))
 
 (use-package editorconfig
   :ensure t
   :config
   (editorconfig-mode 1))
-
-(use-package magit
-  :ensure t
-  :defer t
-  :init (global-set-key (kbd "C-x g") 'magit-status))
 
 ;; counsel (ivy) for better ido-like completion in emacs
 (use-package counsel
@@ -101,7 +66,6 @@
   (global-set-key (kbd "C-c k") 'counsel-ag)
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  ;;(global-set-key (kbd "C-s") 'swiper)
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (global-set-key (kbd "<f1> f") 'counsel-describe-function)
@@ -114,24 +78,16 @@
 (use-package counsel-projectile
   :ensure t)
 
-(use-package projectile
-  :ensure t
-  :defer t
-  :init
-  (projectile-mode 1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-
 (use-package company
   :ensure t
   :defer t
   :init 
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 2)
+  (setq company-idle-delay 0.2)
+  (setq company-minimum-prefix-length 3)
   (add-hook 'lisp-mode-hook #'company-mode)
   (add-hook 'web-mode-hook #'company-mode)
   (add-hook 'js-mode-hook #'company-mode)
-  (add-hook 'python-mode-hook #'company-mode)
-  (add-hook 'vue-mode-hook #'company-mode))
+  (add-hook 'python-mode-hook #'company-mode))
 
 (use-package yasnippet
   :ensure t
@@ -142,7 +98,6 @@
   :ensure t
   :init
   (add-hook 'web-mode-hook #'emmet-mode)
-  (add-hook 'vue-mode-hook #'emmet-mode)
   (add-hook 'js2-mode-hook #'emmet-mode)
   (add-hook 'rjsx-mode-hook #'emmet-mode))
 
@@ -150,21 +105,13 @@
   :ensure t
   :init
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (setq-default web-mode-enable-auto-pairing t)
+  (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
   (setq-default web-mode-enable-auto-closing t)
   (setq-default web-mode-markup-indent-offset 2)
   (setq-default web-mode-css-indent-offset 2)
   (setq-default web-mode-code-indent-offset 2))
 
 (setq-default css-indent-offset 2)
-
-(use-package vue-mode
-  :ensure t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mmm-mode))
-  :config
-  ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
-  (setq mmm-submode-decoration-level 0))
 
 ;; store org files in Dropbox
 (setq-default org-directory "~/Dropbox/org")
@@ -176,12 +123,3 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
-
-(use-package org-bullets
-  :ensure t
-  :init
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
-(use-package org-pomodoro
-  :ensure t
-  :init (require 'org-pomodoro))

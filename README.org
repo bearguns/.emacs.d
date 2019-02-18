@@ -1,36 +1,42 @@
 #+TITLE: Emacs.d
 #+AUTHOR: Sean Brage
 #+EMAIL: seanmbrage@me.com
-* My Emacs Configuration
-
+* Overview & Inspiration
 This is an attempt at creating a more readable and extensible Emacs
 configuration using [[http://orgmode.org][org-mode]] to write my configuration in the world's
 greatest text format. Many thanks go to Andrew Jarrett and [[https://github.com/ahrjarrett/.emacs.d][his
 excellent config files]] for providing inspiration and direction.
 
-* Init
-** Better Defaults
-Better defaults provides some very nice quality-of-life improvements
-over the "stock" Emacs experience. You can [[https://github.com/technomancy/better-defaults][read more about the package
-here.]]
+* Appearance & Theme
+** UI Appearance
+I prefer to just see the Emacs frame with no menus, etc. 
 #+BEGIN_SRC emacs-lisp
-(use-package better-defaults
-  :ensure t
-  :init 
-  (require 'better-defaults)
-  (setq ring-bell-function 'ignore))
+;; Remove os GUI stuff, it's ugly
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
 #+END_SRC
-** Exec Path From Shell
-Many Emacs packages make use of tools like the_silver_searcher, git,
-grep, etc. These tools might not be available to Emacs by default, so
-I like to use the package [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]], which makes Emacs use
-my $PATH.
+** Theme
+I have tried lots and lots of themes, but Atom One Dark is still the one that
+I think is all-around the best.
 #+BEGIN_SRC emacs-lisp
-(use-package exec-path-from-shell
-  :ensure t
-  :init (exec-path-from-shell-initialize))
+;; load atom-one-dark theme
+(use-package atom-one-dark-theme
+:init (load-theme 'atom-one-dark t))
 #+END_SRC
-** I/O Settings
+** Font
+I'm trying to use a font like Menlo that is going to be pre-installed
+on just about every OS, so I can cut back on the amount of fiddling I
+have to do to get Emacs and other apps looking the way I want them to.
+#+BEGIN_SRC emacs-lisp
+(set-face-attribute 'default nil
+                    :family "Menlo"
+                    :height 140)
+#+END_SRC
+* Files & Buffers
+** Saving & Backup Files
+I like to type fewer characters when confirming options. I also hate
+backup files.
 #+BEGIN_SRC emacs-lisp
 ;; Change 'yes or no' options to 'y or n'
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -41,6 +47,7 @@ my $PATH.
 (setq create-lockfiles nil)
 (setq inhibit-startup-message t)
 #+END_SRC
+
 ** Buffer Settings
 *** ibuffer
 The default buffer list is somewhat lacking IMO. Particularly, it
@@ -51,90 +58,51 @@ ships with ibuffer-mode, which is just better IMO.
 ;; use ibuffer by default
 (defalias 'list-buffers 'ibuffer)
 #+END_SRC
-** GUI Settings
-*** Frame and Window Settings
+* Projects
+** Magit
+Magit is one of those, "switch to Emacs just so you can use..." packages. The only other Git interface that comes /close/ is Visual Studio Code, but you can't run that in emacs (yet).
 #+BEGIN_SRC emacs-lisp
-  ;; Set a decent window size:
-  (add-to-list 'default-frame-alist '(height . 64))
-  (add-to-list 'default-frame-alist '(width . 180))
-
-  ;; Remove os GUI stuff, it's ugly
-  (menu-bar-mode -1)
-  (scroll-bar-mode -1)
-  (tool-bar-mode -1)
+(use-package magit
+  :ensure t
+  :defer t
+  :init (global-set-key (kbd "C-x g") 'magit-status))
 #+END_SRC
 
-*** Font & Typefaces
+** Projectile
+Projectile makes it really easy to get around different projects and repos.
 #+BEGIN_SRC emacs-lisp
-;; Source Code Pro font installed via Homebrew on macOS
-(set-face-attribute 'default nil
-                    :family "Source Code Pro"
-                    :height 140)
-#+END_SRC
-
-*** Theme
-#+BEGIN_SRC emacs-lisp
-(use-package material-theme
-  :ensure
-  :config
-  (load-theme 'material t))
-#+END_SRC
-*** Modeline
-#+BEGIN_SRC emacs-lisp
-(use-package powerline
-:ensure t
-:config (powerline-default-theme))
-#+END_SRC
-*** Very Important Settings
-#+BEGIN_SRC emacs-lisp
-(use-package nyan-mode
+(use-package projectile
   :ensure t
   :defer t
   :init
-  (add-hook 'nyan-mode-hook 'nyan-start-animation)
-  (add-hook 'after-init-hook 'nyan-mode 1)
-  (setq-default nyan-animate-nyancat t)
-  (setq-default nyan-wavy-trail t))
+  (projectile-mode 1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 #+END_SRC
 
-** Text Editing
-*** Rainbow Delimiters
-#+BEGIN_SRC emacs-lisp
-(use-package rainbow-delimiters
-  :ensure
-  :config
-  (add-hook 'web-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'js-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'org-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'python-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'vue-mode-hook #'rainbow-delimiters-mode))
-#+END_SRC
-
-*** Smart Parens
+* Coding & Text Editing
+** Smartparens
+It is nice to have your editor try to put parens, brackets, braces,
+etc. in the right places automagically.
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens
-  :ensure t
-  :defer t
-  :init
+  :init 
   (require 'smartparens-config)
-  ;; use smartparens everywhere
-  (add-hook 'web-mode-hook #'smartparens-mode)
-  (add-hook 'js-mode-hook #'smartparens-mode)
-  (add-hook 'org-mode-hook #'smartparens-mode)
-  (add-hook 'python-mode-hook #'smartparens-mode)
-  (add-hook 'vue-mode-hook #'smartparens-mode)
-  (add-hook 'lisp-mode-hook #'smartparens-mode))
+  (add-hook 'lisp-mode-hook #'smartparens-mode)
+  (add-hook 'web-mode-hook #'smartparents-strict-mode)
+  (add-hook 'js-mode-hook #'smartparens-strict-mode))
 #+END_SRC
-*** Window Management
-**** Ace Window
-Ace Window provides easy shortcuts for moving between split panes in Emacs, so let's install it here.
+** Rainbow Delimeters
+This useful package provides matching colors to parens, brackets,
+etc. at every "level", making it easy to scan your code for scopes,
+etc.
 #+BEGIN_SRC emacs-lisp
-(use-package ace-window
-  :ensure t
-  :defer t
-  :init (global-set-key (kbd "M-o") 'ace-window))
+(use-package rainbow-delimiters
+  :init
+  (add-hook 'web-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'js-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'org-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
-* Programming
 ** Editorconfig
 Editorconfig ([[https://editorconfig.org/][editorconfig.org]]) is a wonderful tool for ensuring
 project-wide consistency across editors and IDEs. Basically, it lets a
@@ -146,14 +114,6 @@ fiddly rules.
   :ensure t
   :config
   (editorconfig-mode 1))
-#+END_SRC
-** Magit
-Magit is one of those, "switch to Emacs just so you can use..." packages. The only other Git interface that comes /close/ is Visual Studio Code, but you can't run that in emacs (yet).
-#+BEGIN_SRC emacs-lisp
-(use-package magit
-  :ensure t
-  :defer t
-  :init (global-set-key (kbd "C-x g") 'magit-status))
 #+END_SRC
 ** Counsel
 #+BEGIN_SRC emacs-lisp
@@ -169,7 +129,6 @@ Magit is one of those, "switch to Emacs just so you can use..." packages. The on
   (global-set-key (kbd "C-c k") 'counsel-ag)
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  ;;(global-set-key (kbd "C-s") 'swiper)
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (global-set-key (kbd "<f1> f") 'counsel-describe-function)
@@ -183,17 +142,6 @@ Magit is one of those, "switch to Emacs just so you can use..." packages. The on
   :ensure t)
 #+END_SRC
 
-** Projectile
-Projectile makes it really easy to get around different projects and repos.
-#+BEGIN_SRC emacs-lisp
-(use-package projectile
-  :ensure t
-  :defer t
-  :init
-  (projectile-mode 1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
-#+END_SRC
-
 ** Company Mode
    Company mode seems to still be the more broadly-used autocompletion library for emacs, so as much as I like auto-complete, we will stick with company for now.
 #+BEGIN_SRC emacs-lisp
@@ -201,13 +149,12 @@ Projectile makes it really easy to get around different projects and repos.
   :ensure t
   :defer t
   :init 
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 2)
+  (setq company-idle-delay 0.2)
+  (setq company-minimum-prefix-length 3)
   (add-hook 'lisp-mode-hook #'company-mode)
   (add-hook 'web-mode-hook #'company-mode)
   (add-hook 'js-mode-hook #'company-mode)
-  (add-hook 'python-mode-hook #'company-mode)
-  (add-hook 'vue-mode-hook #'company-mode))
+  (add-hook 'python-mode-hook #'company-mode))
 #+END_SRC
 
 ** Snippets
@@ -218,7 +165,7 @@ Snippets are the best. Let's use them.
   :defer t
   :init (yas-global-mode 1))
 #+END_SRC
-* JavaScript / Front-End Development
+* Web Development
 ** HTML + CSS
 *** Emmet
 Emmet can be thought of as Yasnippet for HTML, providing a rich expansion syntax for HTML templating.
@@ -227,9 +174,7 @@ Emmet can be thought of as Yasnippet for HTML, providing a rich expansion syntax
   :ensure t
   :init
   (add-hook 'web-mode-hook #'emmet-mode)
-  (add-hook 'vue-mode-hook #'emmet-mode)
-  (add-hook 'js2-mode-hook #'emmet-mode)
-  (add-hook 'rjsx-mode-hook #'emmet-mode))
+  (add-hook 'js-mode-hook #'emmet-mode))
 #+END_SRC
 *** Web Mode
 Web Mode makes working with HTML, CSS, and related technologies much nicer.
@@ -238,7 +183,7 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
   :ensure t
   :init
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (setq-default web-mode-enable-auto-pairing t)
+  (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
   (setq-default web-mode-enable-auto-closing t)
   (setq-default web-mode-markup-indent-offset 2)
   (setq-default web-mode-css-indent-offset 2)
@@ -249,24 +194,9 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
 #+BEGIN_SRC emacs-lisp
 (setq-default css-indent-offset 2)
 #+END_SRC
-
-** JavaScript
-*** VueJS
-I love Vue. It's the best around. Let's make Emacs play nicely with
-it.
-#+BEGIN_SRC emacs-lisp
-(use-package vue-mode
-  :ensure t
-  :init
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mmm-mode))
-  :config
-  ;; 0, 1, or 2, representing (respectively) none, low, and high coloring
-  (setq mmm-submode-decoration-level 0))
-#+END_SRC
 * Org Mode
-Org Mode is why you should /start/ using Emacs. This is how I like my config:
-
-** Basic Org Config
+Org Mode is why you should /start/ using Emacs. This is how I like my
+config:
 #+BEGIN_SRC emacs-lisp
 ;; store org files in Dropbox
 (setq-default org-directory "~/Dropbox/org")
@@ -279,19 +209,5 @@ Org Mode is why you should /start/ using Emacs. This is how I like my config:
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
 #+END_SRC
-** Bullets
-The org-bullets package provides more visually-appealing bullets. Let's use it!
-#+BEGIN_SRC emacs-lisp
-(use-package org-bullets
-  :ensure t
-  :init
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-#+END_SRC
-** Org Pomodoro
-Pomodoro timers are the best way I know of to get into a good work flow. Now, you can start them right in Emacs, and have them logged alongside your org tasks!
-#+BEGIN_SRC emacs-lisp
-(use-package org-pomodoro
-  :ensure t
-  :init (require 'org-pomodoro))
-#+END_SRC
+
 
