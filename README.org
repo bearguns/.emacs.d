@@ -7,6 +7,14 @@ configuration using [[http://orgmode.org][org-mode]] to write my configuration i
 greatest text format. Many thanks go to Andrew Jarrett and [[https://github.com/ahrjarrett/.emacs.d][his
 excellent config files]] for providing inspiration and direction.
 
+* Checking Host Operating System
+Some settings, like fonts, home folder location, etc. are going to
+vary somewhat between macOS, Linux, and Windows. This helper function
+will ease the pain somewhat for platform-specific settings.
+#+BEGIN_SRC emacs-lisp
+(defun my-system-type ()
+  (symbol-value 'system-type))
+#+END_SRC
 * Appearance & Theme
 ** UI Appearance
 I prefer to just see the Emacs frame with no menus, etc. 
@@ -25,13 +33,28 @@ I think is all-around the best.
 :init (load-theme 'atom-one-dark t))
 #+END_SRC
 ** Font
-I'm trying to use a font like Menlo that is going to be pre-installed
-on just about every OS, so I can cut back on the amount of fiddling I
-have to do to get Emacs and other apps looking the way I want them to.
+While there are lots of cool fonts out there like Fira Code, Hack,
+Dank Mono, and more, I have found a couple of things to be true:
+
+1. Installing the same font across multiple computers and operating
+   systems is a bit of a PITA.
+2. Fancy fonts are another thing to fiddle with, and it's easy to
+   change them constantly like you change hats.
+
+The solution to the font problem is actually pretty simple: /just use
+monospaced system fonts/. It's not rocket science. Ergo, using our
+handy-dandy =(my-system-type)= function, we can tell Emacs to use the
+best available system typeface for the respective host's OS.
 #+BEGIN_SRC emacs-lisp
-(set-face-attribute 'default nil
+(when (string-equal (my-system-type) 'darwin)
+  (set-face-attribute 'default nil
                     :family "Menlo"
-                    :height 140)
+                    :height 140))
+
+(when (string-equal (my-system-type) 'windows-nt)
+  (set-face-attribute 'default nil
+                    :family "Consolas"
+                    :height 140))
 #+END_SRC
 * Files & Buffers
 ** Saving & Backup Files
@@ -57,6 +80,13 @@ ships with ibuffer-mode, which is just better IMO.
 #+BEGIN_SRC emacs-lisp
 ;; use ibuffer by default
 (defalias 'list-buffers 'ibuffer)
+#+END_SRC
+** Emacs Server/Client
+One of the great things about Emacs is that it can run as a server,
+allowing you to open files from external services in a new buffer
+/within/ your existing Emacs session.
+#+BEGIN_SRC emacs-lisp
+(server-start)
 #+END_SRC
 * Projects
 ** Magit
@@ -203,6 +233,8 @@ config:
 (setq org-agenda-files '("~/Dropbox/org"))
 ;; fill columns in org mode (keep lines from going on into infinity)
 (add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))
+;; org-indent-mode makes it easier (imo) to visually read and scan in Org
+(setq org-startup-indented t)
 ;; org-mode keybindings
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)

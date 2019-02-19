@@ -1,3 +1,6 @@
+(defun my-system-type ()
+  (symbol-value 'system-type))
+
 ;; Remove os GUI stuff, it's ugly
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
@@ -7,9 +10,15 @@
 (use-package atom-one-dark-theme
 :init (load-theme 'atom-one-dark t))
 
-(set-face-attribute 'default nil
+(when (string-equal (my-system-type) 'darwin)
+  (set-face-attribute 'default nil
                     :family "Menlo"
-                    :height 140)
+                    :height 140))
+
+(when (string-equal (my-system-type) 'windows-nt)
+  (set-face-attribute 'default nil
+                    :family "Consolas"
+                    :height 140))
 
 ;; Change 'yes or no' options to 'y or n'
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -22,6 +31,8 @@
 
 ;; use ibuffer by default
 (defalias 'list-buffers 'ibuffer)
+
+(server-start)
 
 (use-package magit
   :ensure t
@@ -98,8 +109,7 @@
   :ensure t
   :init
   (add-hook 'web-mode-hook #'emmet-mode)
-  (add-hook 'js2-mode-hook #'emmet-mode)
-  (add-hook 'rjsx-mode-hook #'emmet-mode))
+  (add-hook 'js-mode-hook #'emmet-mode))
 
 (use-package web-mode
   :ensure t
@@ -118,6 +128,8 @@
 (setq org-agenda-files '("~/Dropbox/org"))
 ;; fill columns in org mode (keep lines from going on into infinity)
 (add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))
+;; org-indent-mode makes it easier (imo) to visually read and scan in Org
+(setq org-startup-indented t)
 ;; org-mode keybindings
 (global-set-key "\C-cl" 'org-store-link)
 (global-set-key "\C-ca" 'org-agenda)
