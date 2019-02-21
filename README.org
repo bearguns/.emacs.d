@@ -57,6 +57,13 @@ best available system typeface for the respective host's OS.
                     :height 140))
 #+END_SRC
 * Files & Buffers
+** Ace Window
+Ace Window makes it easier to jump between multiple windows. I like
+it.
+#+BEGIN_SRC emacs-lisp
+(use-package ace-window
+  :init (global-set-key (kbd "M-o") 'ace-window))
+#+END_SRC
 ** Saving & Backup Files
 I like to type fewer characters when confirming options. I also hate
 backup files.
@@ -118,8 +125,8 @@ etc. in the right places automagically.
   :init 
   (require 'smartparens-config)
   (add-hook 'lisp-mode-hook #'smartparens-mode)
-  (add-hook 'web-mode-hook #'smartparents-strict-mode)
-  (add-hook 'js-mode-hook #'smartparens-strict-mode))
+  (add-hook 'web-mode-hook #'smartparens-mode)
+  (add-hook 'js-mode-hook #'smartparens-mode))
 #+END_SRC
 ** Rainbow Delimeters
 This useful package provides matching colors to parens, brackets,
@@ -181,6 +188,7 @@ fiddly rules.
   :init 
   (setq company-idle-delay 0.2)
   (setq company-minimum-prefix-length 3)
+  (setq company-dabbrev-downcase nil)
   (add-hook 'lisp-mode-hook #'company-mode)
   (add-hook 'web-mode-hook #'company-mode)
   (add-hook 'js-mode-hook #'company-mode)
@@ -214,6 +222,7 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
   :init
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+  (setq web-mode-enable-current-element-highlight t)
   (setq-default web-mode-enable-auto-closing t)
   (setq-default web-mode-markup-indent-offset 2)
   (setq-default web-mode-css-indent-offset 2)

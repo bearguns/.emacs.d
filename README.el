@@ -20,6 +20,9 @@
                     :family "Consolas"
                     :height 140))
 
+(use-package ace-window
+  :init (global-set-key (kbd "M-o") 'ace-window))
+
 ;; Change 'yes or no' options to 'y or n'
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -50,8 +53,8 @@
   :init 
   (require 'smartparens-config)
   (add-hook 'lisp-mode-hook #'smartparens-mode)
-  (add-hook 'web-mode-hook #'smartparents-strict-mode)
-  (add-hook 'js-mode-hook #'smartparens-strict-mode))
+  (add-hook 'web-mode-hook #'smartparens-mode)
+  (add-hook 'js-mode-hook #'smartparens-mode))
 
 (use-package rainbow-delimiters
   :init
@@ -95,6 +98,7 @@
   :init 
   (setq company-idle-delay 0.2)
   (setq company-minimum-prefix-length 3)
+  (setq company-dabbrev-downcase nil)
   (add-hook 'lisp-mode-hook #'company-mode)
   (add-hook 'web-mode-hook #'company-mode)
   (add-hook 'js-mode-hook #'company-mode)
@@ -116,6 +120,7 @@
   :init
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+  (setq web-mode-enable-current-element-highlight t)
   (setq-default web-mode-enable-auto-closing t)
   (setq-default web-mode-markup-indent-offset 2)
   (setq-default web-mode-css-indent-offset 2)
