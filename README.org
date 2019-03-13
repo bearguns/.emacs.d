@@ -16,7 +16,7 @@ will ease the pain somewhat for platform-specific settings.
   (symbol-value 'system-type))
 #+END_SRC
 * Appearance & Theme
-** UI Appearance
+* UI Appearance
 I prefer to just see the Emacs frame with no menus, etc. 
 #+BEGIN_SRC emacs-lisp
 ;; Remove os GUI stuff, it's ugly
@@ -24,15 +24,19 @@ I prefer to just see the Emacs frame with no menus, etc.
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 #+END_SRC
-** Theme
-I have tried lots and lots of themes, but Atom One Dark is still the one that
-I think is all-around the best.
+* Theme
+** Solarized Theme
+Solarized continues to be a solid go-to, and while I need to tweak
+some things (I hate italics, for one), it just looks nice and is easy
+on my eyes.
 #+BEGIN_SRC emacs-lisp
-;; load atom-one-dark theme
-(use-package atom-one-dark-theme
-:init (load-theme 'atom-one-dark t))
+(use-package color-theme-solarized
+:init 
+(setq frame-background-mode 'dark)
+(load-theme 'solarized t)
+(enable-theme 'solarized))
 #+END_SRC
-** Font
+* Fonts
 While there are lots of cool fonts out there like Fira Code, Hack,
 Dank Mono, and more, I have found a couple of things to be true:
 
@@ -48,13 +52,27 @@ best available system typeface for the respective host's OS.
 #+BEGIN_SRC emacs-lisp
 (when (string-equal (my-system-type) 'darwin)
   (set-face-attribute 'default nil
-                    :family "Menlo"
+                    :family "Monaco"
                     :height 140))
 
 (when (string-equal (my-system-type) 'windows-nt)
   (set-face-attribute 'default nil
                     :family "Consolas"
                     :height 140))
+#+END_SRC
+
+* Modeline
+** Nyan Mode
+I don't do many fancy things in the modeline, packages that "improve"
+the modeline can become noisy and fiddly. However, Nyan Mode makes me
+extremely happy, so I keep it going.
+#+BEGIN_SRC emacs-lisp
+(use-package nyan-mode
+  :init
+  (nyan-mode 1)
+  (setq-default nyan-animate-nyancat t)
+  (setq nyan-wavy-trail t)
+  (nyan-start-animation))
 #+END_SRC
 * Files & Buffers
 ** Ace Window
@@ -137,6 +155,7 @@ etc.
   :init
   (add-hook 'web-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'js-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'js2-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'org-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
@@ -232,6 +251,13 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
 *** CSS Indentation
 #+BEGIN_SRC emacs-lisp
 (setq-default css-indent-offset 2)
+#+END_SRC
+** JavaScript
+I'm giving JS2-Mode another try, mostly for the (slightly) better
+syntax highlighting.
+#+BEGIN_SRC emacs-lisp
+(use-package js2-mode
+  :config (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 #+END_SRC
 * Org Mode
 Org Mode is why you should /start/ using Emacs. This is how I like my

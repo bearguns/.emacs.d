@@ -6,19 +6,28 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
-;; load atom-one-dark theme
-(use-package atom-one-dark-theme
-:init (load-theme 'atom-one-dark t))
+(use-package color-theme-solarized
+:init 
+(setq frame-background-mode 'dark)
+(load-theme 'solarized t)
+(enable-theme 'solarized))
 
 (when (string-equal (my-system-type) 'darwin)
   (set-face-attribute 'default nil
-                    :family "Menlo"
+                    :family "Monaco"
                     :height 140))
 
 (when (string-equal (my-system-type) 'windows-nt)
   (set-face-attribute 'default nil
                     :family "Consolas"
                     :height 140))
+
+(use-package nyan-mode
+  :init
+  (nyan-mode 1)
+  (setq-default nyan-animate-nyancat t)
+  (setq nyan-wavy-trail t)
+  (nyan-start-animation))
 
 (use-package ace-window
   :init (global-set-key (kbd "M-o") 'ace-window))
@@ -60,6 +69,7 @@
   :init
   (add-hook 'web-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'js-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'js2-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'org-mode-hook #'rainbow-delimiters-mode))
 
@@ -127,6 +137,9 @@
   (setq-default web-mode-code-indent-offset 2))
 
 (setq-default css-indent-offset 2)
+
+(use-package js2-mode
+  :config (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
 ;; store org files in Dropbox
 (setq-default org-directory "~/Dropbox/org")
