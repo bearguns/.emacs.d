@@ -1,3 +1,4 @@
+
 (defun my-system-type ()
   (symbol-value 'system-type))
 
@@ -46,17 +47,14 @@
 
 (server-start)
 
+(use-package find-file-in-project
+  :init
+  (global-set-key (kbd "C-c p f") 'find-file-in-project))
+
 (use-package magit
   :ensure t
   :defer t
   :init (global-set-key (kbd "C-x g") 'magit-status))
-
-(use-package projectile
-  :ensure t
-  :defer t
-  :init
-  (projectile-mode 1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 (use-package smartparens
   :init 
@@ -97,10 +95,6 @@
   (global-set-key (kbd "<f1> l") 'counsel-find-library)
   (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
   (global-set-key (kbd "<f2> u") 'counsel-unicode-char))
-
-;; counsel-projectile provides wonderful project-based shortcuts and completion
-(use-package counsel-projectile
-  :ensure t)
 
 (use-package company
   :ensure t

@@ -113,25 +113,21 @@ allowing you to open files from external services in a new buffer
 #+BEGIN_SRC emacs-lisp
 (server-start)
 #+END_SRC
-* Projects
-** Magit
+** Find File in Project
+[[https://github.com/technomancy/find-file-in-project][Find File in Project]] is a great, small library for quickly finding
+files inside of a VCS project (Git/Mercurial/SVN/etc).
+#+BEGIN_SRC emacs-lisp
+  (use-package find-file-in-project
+    :init
+    (global-set-key (kbd "C-c p f") 'find-file-in-project))
+#+END_SRC
+* Magit
 Magit is one of those, "switch to Emacs just so you can use..." packages. The only other Git interface that comes /close/ is Visual Studio Code, but you can't run that in emacs (yet).
 #+BEGIN_SRC emacs-lisp
 (use-package magit
   :ensure t
   :defer t
   :init (global-set-key (kbd "C-x g") 'magit-status))
-#+END_SRC
-
-** Projectile
-Projectile makes it really easy to get around different projects and repos.
-#+BEGIN_SRC emacs-lisp
-(use-package projectile
-  :ensure t
-  :defer t
-  :init
-  (projectile-mode 1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 #+END_SRC
 
 * Coding & Text Editing
@@ -192,12 +188,8 @@ fiddly rules.
   (global-set-key (kbd "<f1> l") 'counsel-find-library)
   (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
   (global-set-key (kbd "<f2> u") 'counsel-unicode-char))
-
-;; counsel-projectile provides wonderful project-based shortcuts and completion
-(use-package counsel-projectile
-  :ensure t)
 #+END_SRC
-
+   
 ** Company Mode
    Company mode seems to still be the more broadly-used autocompletion library for emacs, so as much as I like auto-complete, we will stick with company for now.
 #+BEGIN_SRC emacs-lisp
