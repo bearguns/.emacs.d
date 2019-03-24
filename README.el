@@ -1,4 +1,3 @@
-
 (defun my-system-type ()
   (symbol-value 'system-type))
 
@@ -7,11 +6,9 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
-(use-package color-theme-solarized
+(use-package material-theme
 :init 
-(setq frame-background-mode 'dark)
-(load-theme 'solarized t)
-(enable-theme 'solarized))
+(load-theme 'material t))
 
 (when (string-equal (my-system-type) 'darwin)
   (set-face-attribute 'default nil
@@ -50,6 +47,21 @@
 (use-package find-file-in-project
   :init
   (global-set-key (kbd "C-c p f") 'find-file-in-project))
+
+(use-package ivy
+  :init (ivy-mode 1)
+  :config
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "(%d/%d) ")
+  (global-set-key (kbd "C-s") 'swiper)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "C-c g") 'counsel-git)
+  (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  (global-set-key (kbd "C-c k") 'counsel-rg)
+  (global-set-key (kbd "C-x l") 'counsel-locate)
+  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+  (global-set-key (kbd "C-c C-r") 'ivy-resume))
 
 (use-package magit
   :ensure t
@@ -124,16 +136,16 @@
   :init
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+  (add-hook 'web-mode-hook 'emmet-mode)
+  (add-hook 'web-mode-hook 'smartparens-mode)
   (setq web-mode-enable-current-element-highlight t)
+  (setq web-mode-enable-auto-pairing nil)
   (setq-default web-mode-enable-auto-closing t)
   (setq-default web-mode-markup-indent-offset 2)
   (setq-default web-mode-css-indent-offset 2)
   (setq-default web-mode-code-indent-offset 2))
 
 (setq-default css-indent-offset 2)
-
-(use-package js2-mode
-  :config (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
 ;; store org files in Dropbox
 (setq-default org-directory "~/Dropbox/org")

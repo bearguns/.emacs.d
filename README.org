@@ -15,7 +15,6 @@ will ease the pain somewhat for platform-specific settings.
 (defun my-system-type ()
   (symbol-value 'system-type))
 #+END_SRC
-* Appearance & Theme
 * UI Appearance
 I prefer to just see the Emacs frame with no menus, etc. 
 #+BEGIN_SRC emacs-lisp
@@ -25,16 +24,11 @@ I prefer to just see the Emacs frame with no menus, etc.
 (tool-bar-mode -1)
 #+END_SRC
 * Theme
-** Solarized Theme
-Solarized continues to be a solid go-to, and while I need to tweak
-some things (I hate italics, for one), it just looks nice and is easy
-on my eyes.
+** Material Theme
 #+BEGIN_SRC emacs-lisp
-(use-package color-theme-solarized
+(use-package material-theme
 :init 
-(setq frame-background-mode 'dark)
-(load-theme 'solarized t)
-(enable-theme 'solarized))
+(load-theme 'material t))
 #+END_SRC
 * Fonts
 While there are lots of cool fonts out there like Fira Code, Hack,
@@ -113,13 +107,31 @@ allowing you to open files from external services in a new buffer
 #+BEGIN_SRC emacs-lisp
 (server-start)
 #+END_SRC
-** Find File in Project
+** Find File in ProjecFind File in Project
 [[https://github.com/technomancy/find-file-in-project][Find File in Project]] is a great, small library for quickly finding
 files inside of a VCS project (Git/Mercurial/SVN/etc).
 #+BEGIN_SRC emacs-lisp
   (use-package find-file-in-project
     :init
     (global-set-key (kbd "C-c p f") 'find-file-in-project))
+#+END_SRC
+* Ivy, Counsel, Swiper, Oh my!
+#+BEGIN_SRC emacs-lisp
+(use-package ivy
+  :init (ivy-mode 1)
+  :config
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "(%d/%d) ")
+  (global-set-key (kbd "C-s") 'swiper)
+  (global-set-key (kbd "M-x") 'counsel-M-x)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (global-set-key (kbd "C-c g") 'counsel-git)
+  (global-set-key (kbd "C-c j") 'counsel-git-grep)
+  (global-set-key (kbd "C-c k") 'counsel-rg)
+  (global-set-key (kbd "C-x l") 'counsel-locate)
+  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+  (global-set-key (kbd "C-c C-r") 'ivy-resume))
+  
 #+END_SRC
 * Magit
 Magit is one of those, "switch to Emacs just so you can use..." packages. The only other Git interface that comes /close/ is Visual Studio Code, but you can't run that in emacs (yet).
@@ -233,7 +245,10 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
   :init
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+  (add-hook 'web-mode-hook 'emmet-mode)
+  (add-hook 'web-mode-hook 'smartparens-mode)
   (setq web-mode-enable-current-element-highlight t)
+  (setq web-mode-enable-auto-pairing nil)
   (setq-default web-mode-enable-auto-closing t)
   (setq-default web-mode-markup-indent-offset 2)
   (setq-default web-mode-css-indent-offset 2)
@@ -243,13 +258,6 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
 *** CSS Indentation
 #+BEGIN_SRC emacs-lisp
 (setq-default css-indent-offset 2)
-#+END_SRC
-** JavaScript
-I'm giving JS2-Mode another try, mostly for the (slightly) better
-syntax highlighting.
-#+BEGIN_SRC emacs-lisp
-(use-package js2-mode
-  :config (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 #+END_SRC
 * Org Mode
 Org Mode is why you should /start/ using Emacs. This is how I like my
