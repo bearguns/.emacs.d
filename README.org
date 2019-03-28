@@ -107,14 +107,6 @@ allowing you to open files from external services in a new buffer
 #+BEGIN_SRC emacs-lisp
 (server-start)
 #+END_SRC
-** Find File in ProjecFind File in Project
-[[https://github.com/technomancy/find-file-in-project][Find File in Project]] is a great, small library for quickly finding
-files inside of a VCS project (Git/Mercurial/SVN/etc).
-#+BEGIN_SRC emacs-lisp
-  (use-package find-file-in-project
-    :init
-    (global-set-key (kbd "C-c p f") 'find-file-in-project))
-#+END_SRC
 * Ivy, Counsel, Swiper, Oh my!
 #+BEGIN_SRC emacs-lisp
 (use-package ivy
@@ -132,6 +124,16 @@ files inside of a VCS project (Git/Mercurial/SVN/etc).
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
   (global-set-key (kbd "C-c C-r") 'ivy-resume))
   
+#+END_SRC
+* Projectile
+Projectile makes it easy to switch between and navigate within code
+repositories.
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+  :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  :init
+  (projectile-mode +1))
 #+END_SRC
 * Magit
 Magit is one of those, "switch to Emacs just so you can use..." packages. The only other Git interface that comes /close/ is Visual Studio Code, but you can't run that in emacs (yet).

@@ -44,10 +44,6 @@
 
 (server-start)
 
-(use-package find-file-in-project
-  :init
-  (global-set-key (kbd "C-c p f") 'find-file-in-project))
-
 (use-package ivy
   :init (ivy-mode 1)
   :config
@@ -62,6 +58,12 @@
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
   (global-set-key (kbd "C-c C-r") 'ivy-resume))
+
+(use-package projectile
+  :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  :init
+  (projectile-mode +1))
 
 (use-package magit
   :ensure t
