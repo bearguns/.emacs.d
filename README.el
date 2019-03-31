@@ -6,9 +6,9 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
-(use-package material-theme
+(use-package zeno-theme
 :init 
-(load-theme 'material t))
+(load-theme 'zeno t))
 
 (when (string-equal (my-system-type) 'darwin)
   (set-face-attribute 'default nil

@@ -24,11 +24,11 @@ I prefer to just see the Emacs frame with no menus, etc.
 (tool-bar-mode -1)
 #+END_SRC
 * Theme
-** Material Theme
+** Zeno Theme
 #+BEGIN_SRC emacs-lisp
-(use-package material-theme
+(use-package zeno-theme
 :init 
-(load-theme 'material t))
+(load-theme 'zeno t))
 #+END_SRC
 * Fonts
 While there are lots of cool fonts out there like Fira Code, Hack,
