@@ -70,12 +70,12 @@
   :defer t
   :init (global-set-key (kbd "C-x g") 'magit-status))
 
-(use-package smartparens
-  :init 
-  (require 'smartparens-config)
-  (add-hook 'lisp-mode-hook #'smartparens-mode)
-  (add-hook 'web-mode-hook #'smartparens-mode)
-  (add-hook 'js-mode-hook #'smartparens-mode))
+(show-paren-mode 1)
+(electric-pair-mode 1)
+(setq electric-pair-pairs
+  '(
+
+    (?\' . ?\')))
 
 (use-package rainbow-delimiters
   :init
@@ -139,7 +139,6 @@
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
   (add-hook 'web-mode-hook 'emmet-mode)
-  (add-hook 'web-mode-hook 'smartparens-mode)
   (setq web-mode-enable-current-element-highlight t)
   (setq web-mode-enable-auto-pairing nil)
   (setq-default web-mode-enable-auto-closing t)

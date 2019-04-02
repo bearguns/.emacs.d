@@ -145,16 +145,9 @@ Magit is one of those, "switch to Emacs just so you can use..." packages. The on
 #+END_SRC
 
 * Coding & Text Editing
-** Smartparens
-It is nice to have your editor try to put parens, brackets, braces,
-etc. in the right places automagically.
 #+BEGIN_SRC emacs-lisp
-(use-package smartparens
-  :init 
-  (require 'smartparens-config)
-  (add-hook 'lisp-mode-hook #'smartparens-mode)
-  (add-hook 'web-mode-hook #'smartparens-mode)
-  (add-hook 'js-mode-hook #'smartparens-mode))
+(show-paren-mode 1)
+(electric-pair-mode 1)
 #+END_SRC
 ** Rainbow Delimeters
 This useful package provides matching colors to parens, brackets,
@@ -248,7 +241,6 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
   (add-hook 'web-mode-hook 'emmet-mode)
-  (add-hook 'web-mode-hook 'smartparens-mode)
   (setq web-mode-enable-current-element-highlight t)
   (setq web-mode-enable-auto-pairing nil)
   (setq-default web-mode-enable-auto-closing t)
