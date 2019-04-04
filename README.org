@@ -66,7 +66,6 @@ extremely happy, so I keep it going.
   (setq nyan-wavy-trail t)
   (nyan-start-animation))
 #+END_SRC
-* Files & Buffers
 * Ace Window
 Ace Window makes it easier to jump between multiple windows. I like
 it.
@@ -105,24 +104,6 @@ allowing you to open files from external services in a new buffer
 #+BEGIN_SRC emacs-lisp
 (server-start)
 #+END_SRC
-* Ivy, Counsel, Swiper, Oh my!
-#+BEGIN_SRC emacs-lisp
-(use-package ivy
-  :init (ivy-mode 1)
-  :config
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
-  (global-set-key (kbd "C-s") 'swiper)
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  (global-set-key (kbd "C-c k") 'counsel-rg)
-  (global-set-key (kbd "C-x l") 'counsel-locate)
-  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  (global-set-key (kbd "C-c C-r") 'ivy-resume))
-  
-#+END_SRC
 * Projectile
 Projectile makes it easy to switch between and navigate within code
 repositories.
@@ -133,7 +114,7 @@ repositories.
   :init
   (projectile-mode +1))
 #+END_SRC
-p* Magit
+* Magit
 Magit is one of those, "switch to Emacs just so you can use..." packages. The only other Git interface that comes /close/ is Visual Studio Code, but you can't run that in emacs (yet).
 #+BEGIN_SRC emacs-lisp
 (use-package magit
