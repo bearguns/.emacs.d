@@ -54,7 +54,6 @@ best available system typeface for the respective host's OS.
                     :height 140))
 #+END_SRC
 
-* Modeline
 * Nyan Mode
 I don't do many fancy things in the modeline, packages that "improve"
 the modeline can become noisy and fiddly. However, Nyan Mode makes me
@@ -134,7 +133,7 @@ repositories.
   :init
   (projectile-mode +1))
 #+END_SRC
-* Magit
+p* Magit
 Magit is one of those, "switch to Emacs just so you can use..." packages. The only other Git interface that comes /close/ is Visual Studio Code, but you can't run that in emacs (yet).
 #+BEGIN_SRC emacs-lisp
 (use-package magit
