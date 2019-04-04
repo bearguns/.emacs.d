@@ -23,7 +23,6 @@ I prefer to just see the Emacs frame with no menus, etc.
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 #+END_SRC
-* Theme
 * Zeno Theme
 #+BEGIN_SRC emacs-lisp
 (use-package zeno-theme
