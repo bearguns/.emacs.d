@@ -24,7 +24,7 @@ I prefer to just see the Emacs frame with no menus, etc.
 (tool-bar-mode -1)
 #+END_SRC
 * Theme
-** Zeno Theme
+* Zeno Theme
 #+BEGIN_SRC emacs-lisp
 (use-package zeno-theme
 :init 
@@ -56,7 +56,7 @@ best available system typeface for the respective host's OS.
 #+END_SRC
 
 * Modeline
-** Nyan Mode
+* Nyan Mode
 I don't do many fancy things in the modeline, packages that "improve"
 the modeline can become noisy and fiddly. However, Nyan Mode makes me
 extremely happy, so I keep it going.
@@ -69,14 +69,14 @@ extremely happy, so I keep it going.
   (nyan-start-animation))
 #+END_SRC
 * Files & Buffers
-** Ace Window
+* Ace Window
 Ace Window makes it easier to jump between multiple windows. I like
 it.
 #+BEGIN_SRC emacs-lisp
 (use-package ace-window
   :init (global-set-key (kbd "M-o") 'ace-window))
 #+END_SRC
-** Saving & Backup Files
+* Saving & Backup Files
 I like to type fewer characters when confirming options. I also hate
 backup files.
 #+BEGIN_SRC emacs-lisp
@@ -90,8 +90,8 @@ backup files.
 (setq inhibit-startup-message t)
 #+END_SRC
 
-** Buffer Settings
-*** ibuffer
+* Buffer Settings
+** ibuffer
 The default buffer list is somewhat lacking IMO. Particularly, it
 doesn't play nicely with split windows, and presents a /very/
 barebones set of information. That's all well and fine, but Emacs also
@@ -100,7 +100,7 @@ ships with ibuffer-mode, which is just better IMO.
 ;; use ibuffer by default
 (defalias 'list-buffers 'ibuffer)
 #+END_SRC
-** Emacs Server/Client
+* Emacs Server/Client
 One of the great things about Emacs is that it can run as a server,
 allowing you to open files from external services in a new buffer
 /within/ your existing Emacs session.
@@ -144,12 +144,12 @@ Magit is one of those, "switch to Emacs just so you can use..." packages. The on
   :init (global-set-key (kbd "C-x g") 'magit-status))
 #+END_SRC
 
-* Coding & Text Editing
+* Electric Pairs Mode
 #+BEGIN_SRC emacs-lisp
 (show-paren-mode 1)
 (electric-pair-mode 1)
 #+END_SRC
-** Rainbow Delimeters
+* Rainbow Delimeters
 This useful package provides matching colors to parens, brackets,
 etc. at every "level", making it easy to scan your code for scopes,
 etc.
@@ -162,7 +162,7 @@ etc.
   (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'org-mode-hook #'rainbow-delimiters-mode))
 #+END_SRC
-** Editorconfig
+* Editorconfig
 Editorconfig ([[https://editorconfig.org/][editorconfig.org]]) is a wonderful tool for ensuring
 project-wide consistency across editors and IDEs. Basically, it lets a
 team easily enforce spacing, tabs, semicolon, final-lines, and other
@@ -174,7 +174,7 @@ fiddly rules.
   :config
   (editorconfig-mode 1))
 #+END_SRC
-** Counsel
+* Counsel
 #+BEGIN_SRC emacs-lisp
 ;; counsel (ivy) for better ido-like completion in emacs
 (use-package counsel
@@ -197,7 +197,7 @@ fiddly rules.
   (global-set-key (kbd "<f2> u") 'counsel-unicode-char))
 #+END_SRC
    
-** Company Mode
+* Company Mode
    Company mode seems to still be the more broadly-used autocompletion library for emacs, so as much as I like auto-complete, we will stick with company for now.
 #+BEGIN_SRC emacs-lisp
 (use-package company
@@ -213,7 +213,7 @@ fiddly rules.
   (add-hook 'python-mode-hook #'company-mode))
 #+END_SRC
 
-** Snippets
+* Snippets
 Snippets are the best. Let's use them.
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
@@ -221,9 +221,12 @@ Snippets are the best. Let's use them.
   :defer t
   :init (yas-global-mode 1))
 #+END_SRC
-* Web Development
-** HTML + CSS
-*** Emmet
+* Prettier
+(use-package 'prettier-js
+    :config 
+    (add-hook 'js2-mode-hook 'prettier-js-mode)
+    (add-hook 'web-mode-hook 'prettier-js-mode))
+* Emmet
 Emmet can be thought of as Yasnippet for HTML, providing a rich expansion syntax for HTML templating.
 #+BEGIN_SRC emacs-lisp
 (use-package emmet-mode
@@ -232,7 +235,7 @@ Emmet can be thought of as Yasnippet for HTML, providing a rich expansion syntax
   (add-hook 'web-mode-hook #'emmet-mode)
   (add-hook 'js-mode-hook #'emmet-mode))
 #+END_SRC
-*** Web Mode
+* Web Mode
 Web Mode makes working with HTML, CSS, and related technologies much nicer.
 #+BEGIN_SRC emacs-lisp
 (use-package web-mode
@@ -249,7 +252,7 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
   (setq-default web-mode-code-indent-offset 2))
 #+END_SRC
 
-*** CSS Indentation
+* CSS Indentation
 #+BEGIN_SRC emacs-lisp
 (setq-default css-indent-offset 2)
 #+END_SRC
