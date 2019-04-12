@@ -1,6 +1,14 @@
 (defun my-system-type ()
   (symbol-value 'system-type))
 
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook))
+;; install the main package
+(use-package page-break-lines)
+;; install a dependency the dashboard needs to make pretty lines
+
 ;; Remove os GUI stuff, it's ugly
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
@@ -44,21 +52,6 @@
 
 (server-start)
 
-(use-package ivy
-  :init (ivy-mode 1)
-  :config
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
-  (global-set-key (kbd "C-s") 'swiper)
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  (global-set-key (kbd "C-c k") 'counsel-rg)
-  (global-set-key (kbd "C-x l") 'counsel-locate)
-  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-  (global-set-key (kbd "C-c C-r") 'ivy-resume))
-
 (use-package projectile
   :config
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
@@ -72,10 +65,6 @@
 
 (show-paren-mode 1)
 (electric-pair-mode 1)
-(setq electric-pair-pairs
-  '(
-
-    (?\' . ?\')))
 
 (use-package rainbow-delimiters
   :init
@@ -112,20 +101,25 @@
 
 (use-package company
   :ensure t
-  :defer t
-  :init 
-  (setq company-idle-delay 0.2)
-  (setq company-minimum-prefix-length 3)
-  (setq company-dabbrev-downcase nil)
+  :config
   (add-hook 'lisp-mode-hook #'company-mode)
   (add-hook 'web-mode-hook #'company-mode)
   (add-hook 'js-mode-hook #'company-mode)
-  (add-hook 'python-mode-hook #'company-mode))
+  (add-hook 'js2-mode-hook #'company-mode)
+  (add-hook 'python-mode-hook #'company-mode)
+  :init 
+  (setq company-idle-delay 0.1)
+  (setq company-minimum-prefix-length 2)
+  (setq company-dabbrev-downcase nil))
 
 (use-package yasnippet
   :ensure t
   :defer t
   :init (yas-global-mode 1))
+
+(use-package prettier-js
+    :config 
+    (add-hook 'js2-mode-hook 'prettier-js-mode))
 
 (use-package emmet-mode
   :ensure t
@@ -133,11 +127,16 @@
   (add-hook 'web-mode-hook #'emmet-mode)
   (add-hook 'js-mode-hook #'emmet-mode))
 
+(use-package js2-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+
 (use-package web-mode
   :ensure t
-  :init
+  :config
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+  :init
   (add-hook 'web-mode-hook 'emmet-mode)
   (setq web-mode-enable-current-element-highlight t)
   (setq web-mode-enable-auto-pairing nil)
@@ -145,6 +144,16 @@
   (setq-default web-mode-markup-indent-offset 2)
   (setq-default web-mode-css-indent-offset 2)
   (setq-default web-mode-code-indent-offset 2))
+
+(defun enable-minor-mode (my-pair)
+  "Enable minor mode if filename match the regexp.  MY-PAIR is a cons cell (regexp . minor-mode)."
+  (if (buffer-file-name)
+      (if (string-match (car my-pair) buffer-file-name)
+      (funcall (cdr my-pair)))))
+
+(add-hook 'web-mode-hook #'(lambda ()
+                            (enable-minor-mode
+                             '("\\.vue?\\'" . prettier-js-mode))))
 
 (setq-default css-indent-offset 2)
 

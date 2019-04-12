@@ -15,6 +15,19 @@ will ease the pain somewhat for platform-specific settings.
 (defun my-system-type ()
   (symbol-value 'system-type))
 #+END_SRC
+* Emacs Dashboard
+[[https://github.com/emacs-dashboard/emacs-dashboard][Emacs Dashboard]] is a wonderful little tool for displaying a whole
+bunch of helpful stuff when you start Emacs. Recent files, projectile
+projects, org-agenda files and org TODO items...it's great.
+#+BEGIN_SRC emacs-lisp
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook))
+;; install the main package
+(use-package page-break-lines)
+;; install a dependency the dashboard needs to make pretty lines
+#+END_SRC
 * UI Appearance
 I prefer to just see the Emacs frame with no menus, etc. 
 #+BEGIN_SRC emacs-lisp
@@ -122,7 +135,6 @@ Magit is one of those, "switch to Emacs just so you can use..." packages. The on
   :defer t
   :init (global-set-key (kbd "C-x g") 'magit-status))
 #+END_SRC
-
 * Electric Pairs Mode
 #+BEGIN_SRC emacs-lisp
 (show-paren-mode 1)
@@ -181,15 +193,16 @@ fiddly rules.
 #+BEGIN_SRC emacs-lisp
 (use-package company
   :ensure t
-  :defer t
-  :init 
-  (setq company-idle-delay 0.2)
-  (setq company-minimum-prefix-length 3)
-  (setq company-dabbrev-downcase nil)
+  :config
   (add-hook 'lisp-mode-hook #'company-mode)
   (add-hook 'web-mode-hook #'company-mode)
   (add-hook 'js-mode-hook #'company-mode)
-  (add-hook 'python-mode-hook #'company-mode))
+  (add-hook 'js2-mode-hook #'company-mode)
+  (add-hook 'python-mode-hook #'company-mode)
+  :init 
+  (setq company-idle-delay 0.1)
+  (setq company-minimum-prefix-length 2)
+  (setq company-dabbrev-downcase nil))
 #+END_SRC
 
 * Snippets
@@ -201,10 +214,14 @@ Snippets are the best. Let's use them.
   :init (yas-global-mode 1))
 #+END_SRC
 * Prettier
-(use-package 'prettier-js
+Prettier is an "opinionated code formatter" for JavaScript. You set it
+up, and it forces your code to follow certain standards. You can learn
+more about Prettier [[https://prettier.io/][here.]]
+#+BEGIN_SRC emacs-lisp
+(use-package prettier-js
     :config 
-    (add-hook 'js2-mode-hook 'prettier-js-mode)
-    (add-hook 'web-mode-hook 'prettier-js-mode))
+    (add-hook 'js2-mode-hook 'prettier-js-mode))
+#+END_SRC
 * Emmet
 Emmet can be thought of as Yasnippet for HTML, providing a rich expansion syntax for HTML templating.
 #+BEGIN_SRC emacs-lisp
@@ -214,14 +231,23 @@ Emmet can be thought of as Yasnippet for HTML, providing a rich expansion syntax
   (add-hook 'web-mode-hook #'emmet-mode)
   (add-hook 'js-mode-hook #'emmet-mode))
 #+END_SRC
+* JS2-Mode
+For "pure" JavaScript files (i.e. files with a =.js= extension), I
+prefer the features of js2-mode.
+#+BEGIN_SRC emacs-lisp
+(use-package js2-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
+#+END_SRC
 * Web Mode
 Web Mode makes working with HTML, CSS, and related technologies much nicer.
 #+BEGIN_SRC emacs-lisp
 (use-package web-mode
   :ensure t
-  :init
+  :config
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+  :init
   (add-hook 'web-mode-hook 'emmet-mode)
   (setq web-mode-enable-current-element-highlight t)
   (setq web-mode-enable-auto-pairing nil)
@@ -230,7 +256,20 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
   (setq-default web-mode-css-indent-offset 2)
   (setq-default web-mode-code-indent-offset 2))
 #+END_SRC
+* Web Mode + Vue.js + Prettier
+There are some hoops to jump through to make sure web-mode handles
+=.vue= files while also allowing Prettier to do its thing.
+#+BEGIN_SRC emacs-lisp
+(defun enable-minor-mode (my-pair)
+  "Enable minor mode if filename match the regexp.  MY-PAIR is a cons cell (regexp . minor-mode)."
+  (if (buffer-file-name)
+      (if (string-match (car my-pair) buffer-file-name)
+      (funcall (cdr my-pair)))))
 
+(add-hook 'web-mode-hook #'(lambda ()
+                            (enable-minor-mode
+                             '("\\.vue?\\'" . prettier-js-mode))))
+#+END_SRC
 * CSS Indentation
 #+BEGIN_SRC emacs-lisp
 (setq-default css-indent-offset 2)

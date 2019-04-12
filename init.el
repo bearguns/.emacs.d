@@ -29,3 +29,17 @@
 (org-babel-load-file (expand-file-name "~/.emacs.d/README.org"))
 
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (page-break-lines emacs-dashboard zeno-theme yasnippet web-mode use-package smartparens ripgrep rainbow-delimiters projectile prettier-js nyan-mode material-theme markdown-mode+ magit lsp-ui js2-mode import-js golden-ratio flycheck exec-path-from-shell emmet-mode editorconfig counsel company-lsp ace-window))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
