@@ -13,3 +13,5 @@ bookmarks
 ("recentf~")
 recentf~
 .cache/
+.session.*
+transient/

@@ -7,14 +7,6 @@ configuration using [[http://orgmode.org][org-mode]] to write my configuration i
 greatest text format. Many thanks go to Andrew Jarrett and [[https://github.com/ahrjarrett/.emacs.d][his
 excellent config files]] for providing inspiration and direction.
 
-* Checking Host Operating System
-Some settings, like fonts, home folder location, etc. are going to
-vary somewhat between macOS, Linux, and Windows. This helper function
-will ease the pain somewhat for platform-specific settings.
-#+BEGIN_SRC emacs-lisp
-(defun my-system-type ()
-  (symbol-value 'system-type))
-#+END_SRC
 * Emacs Dashboard
 [[https://github.com/emacs-dashboard/emacs-dashboard][Emacs Dashboard]] is a wonderful little tool for displaying a whole
 bunch of helpful stuff when you start Emacs. Recent files, projectile
@@ -36,37 +28,6 @@ I prefer to just see the Emacs frame with no menus, etc.
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 #+END_SRC
-* Zeno Theme
-#+BEGIN_SRC emacs-lisp
-(use-package zeno-theme
-:init 
-(load-theme 'zeno t))
-#+END_SRC
-* Fonts
-While there are lots of cool fonts out there like Fira Code, Hack,
-Dank Mono, and more, I have found a couple of things to be true:
-
-1. Installing the same font across multiple computers and operating
-   systems is a bit of a PITA.
-2. Fancy fonts are another thing to fiddle with, and it's easy to
-   change them constantly like you change hats.
-
-The solution to the font problem is actually pretty simple: /just use
-monospaced system fonts/. It's not rocket science. Ergo, using our
-handy-dandy =(my-system-type)= function, we can tell Emacs to use the
-best available system typeface for the respective host's OS.
-#+BEGIN_SRC emacs-lisp
-(when (string-equal (my-system-type) 'darwin)
-  (set-face-attribute 'default nil
-                    :family "Monaco"
-                    :height 140))
-
-(when (string-equal (my-system-type) 'windows-nt)
-  (set-face-attribute 'default nil
-                    :family "Consolas"
-                    :height 140))
-#+END_SRC
-
 * Nyan Mode
 I don't do many fancy things in the modeline, packages that "improve"
 the modeline can become noisy and fiddly. However, Nyan Mode makes me
@@ -117,16 +78,6 @@ allowing you to open files from external services in a new buffer
 #+BEGIN_SRC emacs-lisp
 (server-start)
 #+END_SRC
-* Projectile
-Projectile makes it easy to switch between and navigate within code
-repositories.
-#+BEGIN_SRC emacs-lisp
-(use-package projectile
-  :config
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  :init
-  (projectile-mode +1))
-#+END_SRC
 * Magit
 Magit is one of those, "switch to Emacs just so you can use..." packages. The only other Git interface that comes /close/ is Visual Studio Code, but you can't run that in emacs (yet).
 #+BEGIN_SRC emacs-lisp
@@ -138,7 +89,6 @@ Magit is one of those, "switch to Emacs just so you can use..." packages. The on
 * Electric Pairs Mode
 #+BEGIN_SRC emacs-lisp
 (show-paren-mode 1)
-(electric-pair-mode 1)
 #+END_SRC
 * Rainbow Delimeters
 This useful package provides matching colors to parens, brackets,
@@ -177,17 +127,12 @@ fiddly rules.
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
   (global-set-key (kbd "C-c k") 'counsel-ag)
+  (global-set-key (kbd "C-c p f") 'counsel-git)
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
   (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-  (global-set-key (kbd "<f1> l") 'counsel-find-library)
-  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-  (global-set-key (kbd "<f2> u") 'counsel-unicode-char))
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file))
 #+END_SRC
-   
 * Company Mode
    Company mode seems to still be the more broadly-used autocompletion library for emacs, so as much as I like auto-complete, we will stick with company for now.
 #+BEGIN_SRC emacs-lisp
@@ -237,6 +182,7 @@ prefer the features of js2-mode.
 #+BEGIN_SRC emacs-lisp
 (use-package js2-mode
   :init
+  (add-hook 'js2-mode-hook 'electric-pair-mode)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 #+END_SRC
 * Web Mode

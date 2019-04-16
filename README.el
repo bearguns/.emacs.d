@@ -1,6 +1,3 @@
-(defun my-system-type ()
-  (symbol-value 'system-type))
-
 (use-package dashboard
   :ensure t
   :config
@@ -13,20 +10,6 @@
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
-
-(use-package zeno-theme
-:init 
-(load-theme 'zeno t))
-
-(when (string-equal (my-system-type) 'darwin)
-  (set-face-attribute 'default nil
-                    :family "Monaco"
-                    :height 140))
-
-(when (string-equal (my-system-type) 'windows-nt)
-  (set-face-attribute 'default nil
-                    :family "Consolas"
-                    :height 140))
 
 (use-package nyan-mode
   :init
@@ -52,19 +35,12 @@
 
 (server-start)
 
-(use-package projectile
-  :config
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  :init
-  (projectile-mode +1))
-
 (use-package magit
   :ensure t
   :defer t
   :init (global-set-key (kbd "C-x g") 'magit-status))
 
 (show-paren-mode 1)
-(electric-pair-mode 1)
 
 (use-package rainbow-delimiters
   :init
@@ -89,15 +65,11 @@
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
   (global-set-key (kbd "C-c k") 'counsel-ag)
+  (global-set-key (kbd "C-c p f") 'counsel-git)
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
   (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-  (global-set-key (kbd "<f1> l") 'counsel-find-library)
-  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-  (global-set-key (kbd "<f2> u") 'counsel-unicode-char))
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file))
 
 (use-package company
   :ensure t
@@ -129,6 +101,7 @@
 
 (use-package js2-mode
   :init
+  (add-hook 'js2-mode-hook 'electric-pair-mode)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 
 (use-package web-mode
