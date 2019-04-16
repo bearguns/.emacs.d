@@ -28,6 +28,14 @@ I prefer to just see the Emacs frame with no menus, etc.
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 #+END_SRC
+* Color Theme
+Loading external themes is slow and one more thing to fiddle
+with. Emacs by default looks pretty nice, actually, and the built-in
+themes do pretty much what you'd want them to if you must have a
+different color scheme or a dark background.
+#+BEGIN_SRC emacs-lisp
+(load-theme 'adwaita)
+#+END_SRC
 * Nyan Mode
 I don't do many fancy things in the modeline, packages that "improve"
 the modeline can become noisy and fiddly. However, Nyan Mode makes me
