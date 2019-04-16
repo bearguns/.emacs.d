@@ -34,6 +34,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-agenda-files nil)
  '(package-selected-packages
    (quote
     (page-break-lines emacs-dashboard zeno-theme yasnippet web-mode use-package smartparens ripgrep rainbow-delimiters projectile prettier-js nyan-mode material-theme markdown-mode+ magit lsp-ui js2-mode import-js golden-ratio flycheck exec-path-from-shell emmet-mode editorconfig counsel company-lsp ace-window))))
