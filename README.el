@@ -1,3 +1,7 @@
+(use-package exec-path-from-shell
+  :init
+  (exec-path-from-shell-initialize))
+
 (use-package dashboard
   :ensure t
   :config
@@ -10,6 +14,21 @@
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
+
+(defun set-light-theme ()
+  "Set the light theme with some customization if needed."
+  (interactive)
+  (load-theme 'adwaita)) ;;adwaita is a nice light theme with a slightly off-white background
+
+(defun set-dark-theme ()
+  "Set the dark theme with some customization if needed."
+  (interactive)
+  (load-theme 'deeper-blue))
+
+(setq current-hour (string-to-number (format-time-string "%H")))
+(if (< current-hour 17) 
+  (set-light-theme)
+  (set-dark-theme))
 
 (use-package nyan-mode
   :init
@@ -65,7 +84,7 @@
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
   (global-set-key (kbd "C-c k") 'counsel-ag)
-  (global-set-key (kbd "C-c p f") 'counsel-git)
+  (global-set-key (kbd "C-c g") 'counsel-git)
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
   (global-set-key (kbd "M-x") 'counsel-M-x)

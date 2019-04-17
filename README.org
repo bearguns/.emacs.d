@@ -7,6 +7,12 @@ configuration using [[http://orgmode.org][org-mode]] to write my configuration i
 greatest text format. Many thanks go to Andrew Jarrett and [[https://github.com/ahrjarrett/.emacs.d][his
 excellent config files]] for providing inspiration and direction.
 
+* Exec Path From Shell
+#+BEGIN_SRC emacs-lisp
+(use-package exec-path-from-shell
+  :init
+  (exec-path-from-shell-initialize))
+#+END_SRC
 * Emacs Dashboard
 [[https://github.com/emacs-dashboard/emacs-dashboard][Emacs Dashboard]] is a wonderful little tool for displaying a whole
 bunch of helpful stuff when you start Emacs. Recent files, projectile
@@ -29,12 +35,25 @@ I prefer to just see the Emacs frame with no menus, etc.
 (tool-bar-mode -1)
 #+END_SRC
 * Color Theme
-Loading external themes is slow and one more thing to fiddle
-with. Emacs by default looks pretty nice, actually, and the built-in
-themes do pretty much what you'd want them to if you must have a
-different color scheme or a dark background.
+I try not to fiddle with color themes too much, but I do prefer a dark
+theme when I'm streaming or coding at night. So I'm shamelessly
+copying [[https://blog.jft.rocks/emacs/time-based-theme.html][this little piece of code]] to set the theme based on the time
+of day.
 #+BEGIN_SRC emacs-lisp
-(load-theme 'adwaita)
+(defun set-light-theme ()
+  "Set the light theme with some customization if needed."
+  (interactive)
+  (load-theme 'adwaita)) ;;adwaita is a nice light theme with a slightly off-white background
+
+(defun set-dark-theme ()
+  "Set the dark theme with some customization if needed."
+  (interactive)
+  (load-theme 'deeper-blue))
+
+(setq current-hour (string-to-number (format-time-string "%H")))
+(if (< current-hour 17) 
+  (set-light-theme)
+  (set-dark-theme))
 #+END_SRC
 * Nyan Mode
 I don't do many fancy things in the modeline, packages that "improve"
@@ -135,7 +154,7 @@ fiddly rules.
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
   (global-set-key (kbd "C-c k") 'counsel-ag)
-  (global-set-key (kbd "C-c p f") 'counsel-git)
+  (global-set-key (kbd "C-c g") 'counsel-git)
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
   (global-set-key (kbd "M-x") 'counsel-M-x)
