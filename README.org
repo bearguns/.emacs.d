@@ -34,6 +34,13 @@ I prefer to just see the Emacs frame with no menus, etc.
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 #+END_SRC
+* Fonts
+Fonts are a PITA, different systems render them differently, include
+different system fonts, etc. But at least set a default that I can
+read with my poor eyes.
+#+BEGIN_SRC emacs-lisp
+(set-face-attribute 'default nil :height 140)
+#+END_SRC
 * Color Theme
 I try not to fiddle with color themes too much, but I do prefer a dark
 theme when I'm streaming or coding at night. So I'm shamelessly
@@ -224,10 +231,11 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
   (add-hook 'web-mode-hook 'emmet-mode)
   (setq web-mode-enable-current-element-highlight t)
   (setq web-mode-enable-auto-pairing nil)
-  (setq-default web-mode-enable-auto-closing t)
-  (setq-default web-mode-markup-indent-offset 2)
-  (setq-default web-mode-css-indent-offset 2)
-  (setq-default web-mode-code-indent-offset 2))
+  (setq web-mode-script-padding 0)
+  ;; don't add indents for script tags, plays nicely with Vue.js
+  (setq web-mode-style-padding 0)
+  ;; don't add indents for style tags, plays nicely with Vue.js
+  (setq-default web-mode-enable-auto-closing t))
 #+END_SRC
 * Web Mode + Vue.js + Prettier
 There are some hoops to jump through to make sure web-mode handles

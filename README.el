@@ -15,6 +15,8 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
+(set-face-attribute 'default nil :height 140)
+
 (defun set-light-theme ()
   "Set the light theme with some customization if needed."
   (interactive)
@@ -132,10 +134,11 @@
   (add-hook 'web-mode-hook 'emmet-mode)
   (setq web-mode-enable-current-element-highlight t)
   (setq web-mode-enable-auto-pairing nil)
-  (setq-default web-mode-enable-auto-closing t)
-  (setq-default web-mode-markup-indent-offset 2)
-  (setq-default web-mode-css-indent-offset 2)
-  (setq-default web-mode-code-indent-offset 2))
+  (setq web-mode-script-padding 0)
+  ;; don't add indents for script tags, plays nicely with Vue.js
+  (setq web-mode-style-padding 0)
+  ;; don't add indents for style tags, plays nicely with Vue.js
+  (setq-default web-mode-enable-auto-closing t))
 
 (defun enable-minor-mode (my-pair)
   "Enable minor mode if filename match the regexp.  MY-PAIR is a cons cell (regexp . minor-mode)."
