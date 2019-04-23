@@ -10,6 +10,7 @@ excellent config files]] for providing inspiration and direction.
 * Exec Path From Shell
 #+BEGIN_SRC emacs-lisp
 (use-package exec-path-from-shell
+  :ensure t
   :init
   (exec-path-from-shell-initialize))
 #+END_SRC
@@ -39,7 +40,7 @@ Fonts are a PITA, different systems render them differently, include
 different system fonts, etc. But at least set a default that I can
 read with my poor eyes.
 #+BEGIN_SRC emacs-lisp
-(set-face-attribute 'default nil :height 140)
+(set-face-attribute 'default nil :height 130)
 #+END_SRC
 * Color Theme
 I try not to fiddle with color themes too much, but I do prefer a dark
@@ -200,6 +201,22 @@ more about Prettier [[https://prettier.io/][here.]]
 (use-package prettier-js
     :config 
     (add-hook 'js2-mode-hook 'prettier-js-mode))
+#+END_SRC
+* Flycheck
+Emacs built-in Flymake is great, but I have some work-specific uses
+for Flycheck.
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :ensure t
+  :init 
+  (global-flycheck-mode)
+  (setq flycheck-highlighting-mode 'lines))
+#+END_SRC
+* ESLint
+ESLint is the de-facto standard for linting JavaScript, so let's use
+it.
+#+BEGIN_SRC emacs-lisp
+(flycheck-add-mode 'javascript-eslint 'web-mode)
 #+END_SRC
 * Emmet
 Emmet can be thought of as Yasnippet for HTML, providing a rich expansion syntax for HTML templating.

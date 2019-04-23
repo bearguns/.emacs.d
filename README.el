@@ -1,4 +1,5 @@
 (use-package exec-path-from-shell
+  :ensure t
   :init
   (exec-path-from-shell-initialize))
 
@@ -15,7 +16,7 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
-(set-face-attribute 'default nil :height 140)
+(set-face-attribute 'default nil :height 130)
 
 (defun set-light-theme ()
   "Set the light theme with some customization if needed."
@@ -113,6 +114,14 @@
 (use-package prettier-js
     :config 
     (add-hook 'js2-mode-hook 'prettier-js-mode))
+
+(use-package flycheck
+  :ensure t
+  :init 
+  (global-flycheck-mode)
+  (setq flycheck-highlighting-mode 'lines))
+
+(flycheck-add-mode 'javascript-eslint 'web-mode)
 
 (use-package emmet-mode
   :ensure t
