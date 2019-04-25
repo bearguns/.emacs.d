@@ -40,7 +40,7 @@ Fonts are a PITA, different systems render them differently, include
 different system fonts, etc. But at least set a default that I can
 read with my poor eyes.
 #+BEGIN_SRC emacs-lisp
-(set-face-attribute 'default nil :height 130)
+(set-face-attribute 'default nil :height 140)
 #+END_SRC
 * Color Theme
 I try not to fiddle with color themes too much, but I do prefer a dark

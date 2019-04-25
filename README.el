@@ -16,7 +16,7 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
-(set-face-attribute 'default nil :height 130)
+(set-face-attribute 'default nil :height 140)
 
 (defun set-light-theme ()
   "Set the light theme with some customization if needed."
