@@ -18,20 +18,23 @@
 
 (set-face-attribute 'default nil :height 140)
 
-(defun set-light-theme ()
-  "Set the light theme with some customization if needed."
-  (interactive)
-  (load-theme 'adwaita)) ;;adwaita is a nice light theme with a slightly off-white background
+(use-package night-owl-theme
+  :ensure t
+  :init (load-theme 'night-owl))
+;;(defun set-light-theme ()
+;;  "Set the light theme with some customization if needed."
+;;  (interactive)
+;;  (load-theme 'adwaita)) ;;adwaita is a nice light theme with a slightly off-white background
 
-(defun set-dark-theme ()
-  "Set the dark theme with some customization if needed."
-  (interactive)
-  (load-theme 'deeper-blue))
+;;(defun set-dark-theme ()
+;;  "Set the dark theme with some customization if needed."
+;;  (interactive)
+;;  (load-theme 'deeper-blue))
 
-(setq current-hour (string-to-number (format-time-string "%H")))
-(if (< current-hour 17) 
-  (set-light-theme)
-  (set-dark-theme))
+;;(setq current-hour (string-to-number (format-time-string "%H")))
+;;(if (< current-hour 17) 
+;;  (set-light-theme)
+;;  (set-dark-theme))
 
 (use-package nyan-mode
   :init

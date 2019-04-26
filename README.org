@@ -48,20 +48,23 @@ theme when I'm streaming or coding at night. So I'm shamelessly
 copying [[https://blog.jft.rocks/emacs/time-based-theme.html][this little piece of code]] to set the theme based on the time
 of day.
 #+BEGIN_SRC emacs-lisp
-(defun set-light-theme ()
-  "Set the light theme with some customization if needed."
-  (interactive)
-  (load-theme 'adwaita)) ;;adwaita is a nice light theme with a slightly off-white background
+(use-package night-owl-theme
+  :ensure t
+  :init (load-theme 'night-owl))
+;;(defun set-light-theme ()
+;;  "Set the light theme with some customization if needed."
+;;  (interactive)
+;;  (load-theme 'adwaita)) ;;adwaita is a nice light theme with a slightly off-white background
 
-(defun set-dark-theme ()
-  "Set the dark theme with some customization if needed."
-  (interactive)
-  (load-theme 'deeper-blue))
+;;(defun set-dark-theme ()
+;;  "Set the dark theme with some customization if needed."
+;;  (interactive)
+;;  (load-theme 'deeper-blue))
 
-(setq current-hour (string-to-number (format-time-string "%H")))
-(if (< current-hour 17) 
-  (set-light-theme)
-  (set-dark-theme))
+;;(setq current-hour (string-to-number (format-time-string "%H")))
+;;(if (< current-hour 17) 
+;;  (set-light-theme)
+;;  (set-dark-theme))
 #+END_SRC
 * Nyan Mode
 I don't do many fancy things in the modeline, packages that "improve"
