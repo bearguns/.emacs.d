@@ -40,7 +40,7 @@ Fonts are a PITA, different systems render them differently, include
 different system fonts, etc. But at least set a default that I can
 read with my poor eyes.
 #+BEGIN_SRC emacs-lisp
-(set-face-attribute 'default nil :height 140)
+(set-face-attribute 'default t :height 110)
 #+END_SRC
 * Color Theme
 I try not to fiddle with color themes too much, but I do prefer a dark
@@ -249,31 +249,13 @@ Web Mode makes working with HTML, CSS, and related technologies much nicer.
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
   :init
   (add-hook 'web-mode-hook 'emmet-mode)
+  (add-hook 'web-mode-hook 'electric-pair-mode)
+  (add-hook 'web-mode-hook 'electric-indent-mode)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
   (setq web-mode-enable-current-element-highlight t)
   (setq web-mode-enable-auto-pairing nil)
-  (setq web-mode-script-padding 0)
-  ;; don't add indents for script tags, plays nicely with Vue.js
-  (setq web-mode-style-padding 0)
-  ;; don't add indents for style tags, plays nicely with Vue.js
   (setq-default web-mode-enable-auto-closing t))
-#+END_SRC
-* Web Mode + Vue.js + Prettier
-There are some hoops to jump through to make sure web-mode handles
-=.vue= files while also allowing Prettier to do its thing.
-#+BEGIN_SRC emacs-lisp
-(defun enable-minor-mode (my-pair)
-  "Enable minor mode if filename match the regexp.  MY-PAIR is a cons cell (regexp . minor-mode)."
-  (if (buffer-file-name)
-      (if (string-match (car my-pair) buffer-file-name)
-      (funcall (cdr my-pair)))))
-
-(add-hook 'web-mode-hook #'(lambda ()
-                            (enable-minor-mode
-                             '("\\.vue?\\'" . prettier-js-mode))))
-#+END_SRC
-* CSS Indentation
-#+BEGIN_SRC emacs-lisp
-(setq-default css-indent-offset 2)
 #+END_SRC
 * Org Mode
 Org Mode is why you should /start/ using Emacs. This is how I like my
@@ -294,3 +276,6 @@ config:
 #+END_SRC
 
 
+#+BEGIN_SRC emacs-lisp
+(setq-default indent-tabs-mode nil)
+#+END_SRC

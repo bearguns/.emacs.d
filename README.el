@@ -16,7 +16,7 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 
-(set-face-attribute 'default nil :height 140)
+(set-face-attribute 'default t :height 110)
 
 (use-package night-owl-theme
   :ensure t
@@ -144,25 +144,13 @@
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
   :init
   (add-hook 'web-mode-hook 'emmet-mode)
+  (add-hook 'web-mode-hook 'electric-pair-mode)
+  (add-hook 'web-mode-hook 'electric-indent-mode)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
   (setq web-mode-enable-current-element-highlight t)
   (setq web-mode-enable-auto-pairing nil)
-  (setq web-mode-script-padding 0)
-  ;; don't add indents for script tags, plays nicely with Vue.js
-  (setq web-mode-style-padding 0)
-  ;; don't add indents for style tags, plays nicely with Vue.js
   (setq-default web-mode-enable-auto-closing t))
-
-(defun enable-minor-mode (my-pair)
-  "Enable minor mode if filename match the regexp.  MY-PAIR is a cons cell (regexp . minor-mode)."
-  (if (buffer-file-name)
-      (if (string-match (car my-pair) buffer-file-name)
-      (funcall (cdr my-pair)))))
-
-(add-hook 'web-mode-hook #'(lambda ()
-                            (enable-minor-mode
-                             '("\\.vue?\\'" . prettier-js-mode))))
-
-(setq-default css-indent-offset 2)
 
 ;; store org files in Dropbox
 (setq-default org-directory "~/Dropbox/org")
@@ -176,3 +164,5 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-switchb)
+
+(setq-default indent-tabs-mode nil)
