@@ -81,12 +81,12 @@
   :ensure t
   :defer t
   :init (global-set-key (kbd "C-x g") 'magit-status))
-; Magit for working in Git repositories
+;; Magit for working in Git repositories
 (use-package editorconfig
   :ensure t
   :config
   (editorconfig-mode 1))
-; Editorconfig for applying consistent settings in projects with multiple users.
+;; Editorconfig for applying consistent settings in projects with multiple users.
 (use-package flycheck
   :ensure t
   :config
@@ -94,7 +94,9 @@
   :init
   (global-flycheck-mode)
   (setq flycheck-highlighting-mode 'lines))
-; Flycheck for identifying errors in buffers
+;; Flycheck for identifying errors in buffers
+(use-package emmet-mode)
+;; emmet for expanding html elements
 (use-package web-mode
   :ensure t
   :config
@@ -143,3 +145,17 @@
   (exec-path-from-shell-initialize))
 (provide 'init)
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (exec-path-from-shell prettier-js js2-mode web-mode flycheck editorconfig magit rainbow-delimiters counsel yasnippet use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
