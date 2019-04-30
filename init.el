@@ -3,8 +3,6 @@
 ;; Custom configuration, some copied from Andrew Jarrett's excellent config
 ;; Author Information
 ;;; Code:
-(setq inhibit-startup-message t)
-
 ;; Packages
 (require 'package)
 (setq package-enable-at-startup nil)
@@ -27,7 +25,7 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 ; remove OS/DE chrome
-(set-face-attribute 'default t :height 110)
+(set-face-attribute 'default t :height 150)
 ; default font at a decent height on most monitors
 
 ;; Default Behavior
@@ -77,6 +75,11 @@
   (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'org-mode-hook #'rainbow-delimiters-mode))
 ;; colorize nested delimiters for easy reading
+(use-package company
+  :init
+  (add-hook 'web-mode-hook 'company-mode)
+  (add-hook 'js2-mode-hook 'company-mode))
+;; company for auto-completion in buffers
 (use-package magit
   :ensure t
   :defer t
@@ -91,6 +94,7 @@
   :ensure t
   :config
   (flycheck-add-mode 'javascript-eslint 'web-mode)
+  (flycheck-add-mode 'javascript-eslint 'js2-mode)
   :init
   (global-flycheck-mode)
   (setq flycheck-highlighting-mode 'lines))
@@ -102,31 +106,32 @@
   :config
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
   (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
+
+  (setq web-mode-enable-current-element-highlight t)
+  (setq web-mode-enable-auto-pairing nil)
+  (setq web-mode-enable-auto-closing t)
   :init
   (add-hook 'web-mode-hook 'emmet-mode)
   (add-hook 'web-mode-hook 'electric-pair-mode)
+  (add-hook 'web-mode-hook 'prettier-js-mode)
+  (defun web-mode-indent-vue ()
+      (setq-local web-mode-style-padding 0)
+      (setq-local web-mode-script-padding 0))
+  (add-hook 'web-mode-hook 'web-mode-indent-vue)
   (defvar web-mode-electric-pairs '((?\' . ?\')))
   (defun web-mode-add-electric-pairs ()
     (setq-local electric-pair-pairs (append electric-pair-pairs web-mode-electric-pairs))
     (setq-local electric-pair-text-pairs electric-pair-pairs))
-  (add-hook 'web-mode-hook 'web-mode-add-electric-pairs)
-  (setq web-mode-style-padding 0)
-  (setq web-mode-script-padding 0)
-  (setq web-mode-enable-current-element-highlight t)
-  (setq web-mode-enable-auto-pairing nil)
-  (setq-default web-mode-enable-auto-closing t))
+  (add-hook 'web-mode-hook 'web-mode-add-electric-pairs))
 ;; web-mode for HTML + VueJS
 (use-package js2-mode
   :init
   (add-hook 'js2-mode-hook 'electric-pair-mode)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 ;; nice mode for working in javascript files
-(flycheck-add-mode 'javascript-eslint 'web-mode)
-(flycheck-add-mode 'javascript-eslint 'js2-mode)
+
 ;; update flycheck for web development
 (use-package prettier-js
-  :config
-  (add-to-list 'auto-mode-alist '("\\.vue?\\'" . prettier-js-mode))
   :init
   (add-hook 'js2-mode-hook 'prettier-js-mode))
 ;; prettier-js code formatting
@@ -143,7 +148,6 @@
   :ensure t
   :init
   (exec-path-from-shell-initialize))
-(provide 'init)
 ;;; init.el ends here
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -152,7 +156,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (exec-path-from-shell prettier-js js2-mode web-mode flycheck editorconfig magit rainbow-delimiters counsel yasnippet use-package))))
+    (company yasnippet web-mode use-package rainbow-delimiters prettier-js magit js2-mode flycheck exec-path-from-shell emmet-mode editorconfig counsel))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
