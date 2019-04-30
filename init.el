@@ -19,31 +19,32 @@
 (require 'use-package)
 
 ;; Appearance
-(load-theme 'deeper-blue)
-; use a default theme, less installation time
+(use-package overcast-theme
+  :init (load-theme 'overcast t))
+;; use a nice, low-noise theme
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
-; remove OS/DE chrome
-(set-face-attribute 'default t :height 150)
-; default font at a decent height on most monitors
+;; remove OS/DE chrome
+(set-face-attribute 'default t :height 110)
+;; default font at a decent height on most monitors
 
 ;; Default Behavior
 (fset 'yes-or-no-p 'y-or-n-p)
-; allow y/n to confirm options
+;; allow y/n to confirm options
 (setq auto-save-default nil)
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
-; no backups or locks
+;; no backups or locks
 
 ;; Working with Text
 (use-package yasnippet
   :ensure t
   :defer t
   :init (yas-global-mode 1))
-; yasnippets is an excellent snippet manager
+;; yasnippets is an excellent snippet manager
 (electric-pair-mode 1)
-; electric pair mode provides what you'd want from smartparens/autopairs out-of-the-box
+;; electric pair mode provides what you'd want from smartparens/autopairs out-of-the-box
 
 ;; Navigating & Managing Files
 (defalias 'list-buffers 'ibuffer)
@@ -154,9 +155,12 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("5ac259a7a0a0d2b541199480c58510b4f9f244e810da999d3f22d5e3bb0ad208" default)))
  '(package-selected-packages
    (quote
-    (company yasnippet web-mode use-package rainbow-delimiters prettier-js magit js2-mode flycheck exec-path-from-shell emmet-mode editorconfig counsel))))
+    (overcast-theme company yasnippet web-mode use-package rainbow-delimiters prettier-js magit js2-mode flycheck exec-path-from-shell emmet-mode editorconfig counsel))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
