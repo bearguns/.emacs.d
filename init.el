@@ -28,7 +28,9 @@
 ;; remove OS/DE chrome
 (set-face-attribute 'default nil :height 140)
 ;; default font at a decent height on most monitors
-
+(display-battery-mode)
+(display-time-mode)
+;; couple of handy modeline items
 ;; Default Behavior
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; allow y/n to confirm options
