@@ -149,20 +149,3 @@
   :init
   (exec-path-from-shell-initialize))
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("54d091c28661aa25516d4f58044412e745eddb50c8e04e3a0788a77941981bb0" "5ac259a7a0a0d2b541199480c58510b4f9f244e810da999d3f22d5e3bb0ad208" default)))
- '(package-selected-packages
-   (quote
-    (slime-theme overcast-theme company yasnippet web-mode use-package rainbow-delimiters prettier-js magit js2-mode flycheck exec-path-from-shell emmet-mode editorconfig counsel))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
