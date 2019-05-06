@@ -26,7 +26,7 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 ;; remove OS/DE chrome
-(set-face-attribute 'default t :height 110)
+(set-face-attribute 'default nil :height 140)
 ;; default font at a decent height on most monitors
 
 ;; Default Behavior
@@ -36,7 +36,9 @@
 (setq make-backup-files nil)
 (setq create-lockfiles nil)
 ;; no backups or locks
-
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
+;; show line numbers in newer versions of emacs
 ;; Working with Text
 (use-package yasnippet
   :ensure t
@@ -114,7 +116,6 @@
   :init
   (add-hook 'web-mode-hook 'emmet-mode)
   (add-hook 'web-mode-hook 'electric-pair-mode)
-  (add-hook 'web-mode-hook 'prettier-js-mode)
   (defun web-mode-indent-vue ()
       (setq-local web-mode-style-padding 0)
       (setq-local web-mode-script-padding 0))
@@ -130,8 +131,6 @@
   (add-hook 'js2-mode-hook 'electric-pair-mode)
   (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
 ;; nice mode for working in javascript files
-
-;; update flycheck for web development
 (use-package prettier-js
   :init
   (add-hook 'js2-mode-hook 'prettier-js-mode))
@@ -157,10 +156,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("5ac259a7a0a0d2b541199480c58510b4f9f244e810da999d3f22d5e3bb0ad208" default)))
+    ("54d091c28661aa25516d4f58044412e745eddb50c8e04e3a0788a77941981bb0" "5ac259a7a0a0d2b541199480c58510b4f9f244e810da999d3f22d5e3bb0ad208" default)))
  '(package-selected-packages
    (quote
-    (overcast-theme company yasnippet web-mode use-package rainbow-delimiters prettier-js magit js2-mode flycheck exec-path-from-shell emmet-mode editorconfig counsel))))
+    (slime-theme overcast-theme company yasnippet web-mode use-package rainbow-delimiters prettier-js magit js2-mode flycheck exec-path-from-shell emmet-mode editorconfig counsel))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
