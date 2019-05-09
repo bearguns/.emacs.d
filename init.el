@@ -27,11 +27,32 @@
 (tool-bar-mode -1)
 ;; remove OS/DE chrome
 
-(set-face-attribute 'default nil :height 140)
+(set-face-attribute 'default nil :font "Hack Nerd Font-14")
 ;; default font at a decent height on most monitors
 
-(display-battery-mode)
-(display-time-mode)
+(use-package doom-modeline
+  :ensure t
+  :config
+  (setq doom-modeline-buffer-file-name-style 'relative-to-project)
+  (setq doom-modeline-icon t)
+  (setq doom-modeline-minor-modes t)
+  ;; The maximum displayed length of the branch name of version control.
+  (setq doom-modeline-vcs-max-length 128)
+  :init (doom-modeline-mode))
+;; fancy modeline, but not too fancy
+
+;; battery status
+(use-package fancy-battery
+  :init (fancy-battery-mode))
+
+;; I couldn't resist
+(use-package nyan-mode
+  :config
+  (setq-default nyan-animate-nyancat t)
+  (setq-default nyan-wavy-trail t)
+  (nyan-start-animation)
+  :init
+  (nyan-mode))
 ;; couple of handy modeline items
 
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -43,6 +64,7 @@
 ;; no backups or locks
 
 (when (version<= "26.0.50" emacs-version )
+  (line-number-mode -1)
   (global-display-line-numbers-mode))
 ;; show line numbers in newer versions of emacs
 
@@ -166,3 +188,17 @@
   :init
   (exec-path-from-shell-initialize))
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (treemacs-evil yasnippet web-mode use-package rainbow-delimiters prettier-js overcast-theme nyan-mode magit js2-mode flycheck fancy-battery exec-path-from-shell emmet-mode editorconfig doom-modeline counsel company))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
