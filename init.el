@@ -27,9 +27,12 @@
 (tool-bar-mode -1)
 ;; remove OS/DE chrome
 
-(set-face-attribute 'default nil :font "Hack Nerd Font-14")
+(set-face-attribute 'default nil :font "Iosevka Nerd Font-13")
 ;; default font at a decent height on most monitors
 
+(use-package treemacs
+  :ensure t
+  :init (global-set-key (kbd "s-t") 'treemacs))
 (use-package doom-modeline
   :ensure t
   :config
