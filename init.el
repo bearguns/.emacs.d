@@ -27,22 +27,13 @@
 (tool-bar-mode -1)
 ;; remove OS/DE chrome
 
-(set-face-attribute 'default nil :font "Iosevka Nerd Font-13")
-;; default font at a decent height on most monitors
+(set-face-attribute 'default nil
+		    :font "DejaVuSansMono Nerd Font-15")
+;; easy to read font at a decent height on most monitors
 
 (use-package treemacs
   :ensure t
   :init (global-set-key (kbd "s-t") 'treemacs))
-(use-package doom-modeline
-  :ensure t
-  :config
-  (setq doom-modeline-buffer-file-name-style 'relative-to-project)
-  (setq doom-modeline-icon t)
-  (setq doom-modeline-minor-modes t)
-  ;; The maximum displayed length of the branch name of version control.
-  (setq doom-modeline-vcs-max-length 128)
-  :init (doom-modeline-mode))
-;; fancy modeline, but not too fancy
 
 ;; battery status
 (use-package fancy-battery
@@ -120,7 +111,8 @@
 (use-package magit
   :ensure t
   :defer t
-  :init (global-set-key (kbd "C-x g") 'magit-status))
+  :init
+  (global-set-key (kbd "C-x g") 'magit-status))
 ;; Magit for working in Git repositories
 
 (use-package editorconfig
@@ -129,14 +121,23 @@
   (editorconfig-mode 1))
 ;; Editorconfig for applying consistent settings in projects with multiple users.
 
+(use-package add-node-modules-path
+  :config
+  (add-hook 'js2-mode-hook #'add-node-modules-path))
+
+
 (use-package flycheck
   :ensure t
   :config
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   (flycheck-add-mode 'javascript-eslint 'js2-mode)
-  :init
   (global-flycheck-mode)
-  (setq flycheck-highlighting-mode 'lines))
+  (add-to-list 'display-buffer-alist
+	       `(,(rx bos "*Flycheck errors*" eos)
+		 (display-buffer-reuse-window
+		  display-buffer-in-side-window)
+		 (side          . bottom)
+		 (window-height . 0.25))))
 ;; Flycheck for identifying errors in buffers
 
 (use-package emmet-mode)
@@ -188,20 +189,6 @@
 
 (use-package exec-path-from-shell
   :ensure t
-  :init
+  :config
   (exec-path-from-shell-initialize))
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (treemacs-evil yasnippet web-mode use-package rainbow-delimiters prettier-js overcast-theme nyan-mode magit js2-mode flycheck fancy-battery exec-path-from-shell emmet-mode editorconfig doom-modeline counsel company))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
