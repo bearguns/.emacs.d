@@ -123,12 +123,16 @@
 
 (use-package add-node-modules-path
   :config
+  (add-hook 'web-mode-hook #'add-node-modules-path)
   (add-hook 'js2-mode-hook #'add-node-modules-path))
 
 
 (use-package flycheck
   :ensure t
   :config
+  (setq-default flycheck-disabled-checkers
+		(append flycheck-disabled-checkers
+			'(javascript-jshint)))
   (flycheck-add-mode 'javascript-eslint 'web-mode)
   (flycheck-add-mode 'javascript-eslint 'js2-mode)
   (global-flycheck-mode)
@@ -173,7 +177,16 @@
 ;; nice mode for working in javascript files
 
 (use-package prettier-js
+  :config
+  (defun enable-minor-mode (my-pair)
+  "Enable minor mode if filename match the regexp.  MY-PAIR is a cons cell (regexp . minor-mode)."
+  (if (buffer-file-name)
+      (if (string-match (car my-pair) buffer-file-name)
+      (funcall (cdr my-pair)))))
   :init
+  (add-hook 'web-mode-hook #'(lambda ()
+			       (enable-minor-mode
+				'("\\.vue?\\'" . prettier-js-mode))))
   (add-hook 'js2-mode-hook 'prettier-js-mode))
 ;; prettier-js code formatting
 
