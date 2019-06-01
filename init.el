@@ -18,8 +18,8 @@
 (require 'use-package)
 ;; use use-package because it's what people use and it's nice
 
-(use-package overcast-theme
-  :init (load-theme 'overcast t))
+(use-package atom-one-dark-theme
+  :init (load-theme 'atom-one-dark t))
 ;; use a nice, low-noise theme
 
 (menu-bar-mode -1)
@@ -133,7 +133,7 @@
   (setq-default flycheck-disabled-checkers
 		(append flycheck-disabled-checkers
 			'(javascript-jshint)))
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
+  (flycheck-add-mode 'javascript-eslint 'vue-mode)
   (flycheck-add-mode 'javascript-eslint 'js2-mode)
   (global-flycheck-mode)
   (add-to-list 'display-buffer-alist
@@ -151,7 +151,6 @@
   :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
 
   (setq web-mode-enable-current-element-highlight t)
   (setq web-mode-enable-auto-pairing nil)
@@ -159,10 +158,7 @@
   :init
   (add-hook 'web-mode-hook 'emmet-mode)
   (add-hook 'web-mode-hook 'electric-pair-mode)
-  (defun web-mode-indent-vue ()
-      (setq-local web-mode-style-padding 0)
-      (setq-local web-mode-script-padding 0))
-  (add-hook 'web-mode-hook 'web-mode-indent-vue)
+
   (defvar web-mode-electric-pairs '((?\' . ?\')))
   (defun web-mode-add-electric-pairs ()
     (setq-local electric-pair-pairs (append electric-pair-pairs web-mode-electric-pairs))
@@ -190,6 +186,45 @@
   (add-hook 'js2-mode-hook 'prettier-js-mode))
 ;; prettier-js code formatting
 
+(use-package eglot
+  :config
+  (add-to-list 'eglot-server-programs '(js2-mode . ("javascript-typescript-stdio"))))
+;; language-server-protocol client
+
+(use-package vue-mode
+  :config
+  (setq mmm-submode-decoration-level 0)
+  (setq vue-html-tab-width 0)
+  :init
+  (defclass eglot-vls (eglot-lsp-server) ()
+    :documentation "Vue Language Server.")
+
+  (add-to-list 'eglot-server-programs
+	       '(vue-mode . (eglot-vls . ("vls" "--stdio")))
+	       )
+
+  (cl-defmethod eglot-initialization-options ((server eglot-vls))
+    "Passes through required vetur initialization options to VLS."
+    '(:vetur
+      (:completion
+       (:autoImport t :useScaffoldSnippets t :tagCasing "kebab")
+       :grammar
+       (:customBlocks
+	(:docs "md" :i18n "json"))
+       :validation
+       (:template t :style t :script t)
+       :format
+       (:options
+	:defaultFormatter
+	(:css "prettier" :postcss "prettier" :scss "prettier" :js "prettier" :ts "prettier"))
+       :trace
+       (:server "verbose")
+       :dev
+       (:vlsPath ""))
+      ))
+  (add-hook 'vue-mode-hook 'electric-pair-mode))
+;;vuejs mode
+
 (add-hook 'org-mode-hook (lambda () (auto-fill-mode 1)))
 (setq-default org-startup-indented t)
 ;; org-mode keybindings
@@ -205,3 +240,16 @@
   :config
   (exec-path-from-shell-initialize))
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(electric-pair-mode t)
+ '(vue-html-tab-width 0))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
