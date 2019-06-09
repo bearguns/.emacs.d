@@ -3,6 +3,42 @@
 ;; Custom configuration, some copied from Andrew Jarrett's excellent config
 ;; Author Information
 ;;; Code:
+
+;; Emacs Settings ;;
+(fset 'yes-or-no-p 'y-or-n-p)
+;; allow y/n to confirm options
+
+(setq auto-save-default nil)
+(setq make-backup-files nil)
+(setq create-lockfiles nil)
+;; no backups or locks
+
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(tool-bar-mode -1)
+;; remove OS/DE chrome
+
+(defalias 'list-buffers 'ibuffer)
+;;; use ibuffer by default when pressing C-x b
+
+(electric-pair-mode 1)
+;; electric pair mode provides what you'd want from smartparens/autopairs out-of-the-box
+
+(electric-indent-mode 1)
+;; electric indent mode is pretty smart about properly indenting code
+
+(line-number-mode -1)
+(global-display-line-numbers-mode)
+;; show line numbers in newer versions of emacs
+
+(set-face-attribute 'default nil
+		    :font "DejaVuSansMono Nerd Font-15")
+;; easy to read font at a decent height on most monitors
+
+(show-paren-mode 1)
+;; show matching parens, very helpful
+
+;; Package Manager ;;
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives
@@ -18,26 +54,9 @@
 (require 'use-package)
 ;; use use-package because it's what people use and it's nice
 
-(use-package atom-one-dark-theme
-  :init (load-theme 'atom-one-dark t))
+(use-package night-owl-theme
+  :init (load-theme 'night-owl t))
 ;; use a nice, low-noise theme
-
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-;; remove OS/DE chrome
-
-(set-face-attribute 'default nil
-		    :font "DejaVuSansMono Nerd Font-15")
-;; easy to read font at a decent height on most monitors
-
-(use-package treemacs
-  :ensure t
-  :init (global-set-key (kbd "s-t") 'treemacs))
-
-;; battery status
-(use-package fancy-battery
-  :init (fancy-battery-mode))
 
 ;; I couldn't resist
 (use-package nyan-mode
@@ -49,18 +68,6 @@
   (nyan-mode))
 ;; couple of handy modeline items
 
-(fset 'yes-or-no-p 'y-or-n-p)
-;; allow y/n to confirm options
-
-(setq auto-save-default nil)
-(setq make-backup-files nil)
-(setq create-lockfiles nil)
-;; no backups or locks
-
-(when (version<= "26.0.50" emacs-version )
-  (line-number-mode -1)
-  (global-display-line-numbers-mode))
-;; show line numbers in newer versions of emacs
 
 (use-package yasnippet
   :ensure t
@@ -68,11 +75,16 @@
   :init (yas-global-mode 1))
 ;; yasnippets is an excellent snippet manager
 
-(electric-pair-mode 1)
-;; electric pair mode provides what you'd want from smartparens/autopairs out-of-the-box
-
-(defalias 'list-buffers 'ibuffer)
-;;; use ibuffer by default when pressing C-x b
+(use-package company
+  :config
+  (setq company-idle-delay 0.2)
+  (setq company-minimum-prefix-length 3)
+  (global-company-mode)
+  :init
+  (add-hook 'web-mode-hook 'company-mode)
+  (add-hook 'vue-mode-hook 'company-mode)
+  (add-hook 'js-mode-hook 'company-mode))
+;; company for auto-completion in buffers
 
 (use-package counsel
   :ensure t
@@ -80,7 +92,7 @@
   (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "(%d/%d) ")
-  (global-set-key (kbd "C-s") 'swiper)
+  (global-set-key (kbd "C-c s") 'swiper)
   (global-set-key (kbd "C-c i") 'ivy-resume)
   (global-set-key (kbd "C-c k") 'counsel-rg)
   (global-set-key (kbd "C-c g") 'counsel-git)
@@ -90,23 +102,15 @@
   (global-set-key (kbd "C-x C-f") 'counsel-find-file))
 ;;; counsel provides excellent ido-like completion tools
 
-(show-paren-mode 1)
-;; show matching parens, very helpful
-
 (use-package rainbow-delimiters
+  :config (rainbow-delimiters-mode 1)
   :init
   (add-hook 'web-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'js-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'js2-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'vue-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'org-mode-hook #'rainbow-delimiters-mode))
 ;; colorize nested delimiters for easy reading
-
-(use-package company
-  :init
-  (add-hook 'web-mode-hook 'company-mode)
-  (add-hook 'js2-mode-hook 'company-mode))
-;; company for auto-completion in buffers
 
 (use-package magit
   :ensure t
@@ -123,9 +127,10 @@
 
 (use-package add-node-modules-path
   :config
+  (add-hook 'vue-mode-hook #'add-node-modules-path)
   (add-hook 'web-mode-hook #'add-node-modules-path)
-  (add-hook 'js2-mode-hook #'add-node-modules-path))
-
+  (add-hook 'js-mode-hook #'add-node-modules-path))
+;; Read binaries like ESLint etc. from a project's node modules directory
 
 (use-package flycheck
   :ensure t
@@ -134,7 +139,7 @@
 		(append flycheck-disabled-checkers
 			'(javascript-jshint)))
   (flycheck-add-mode 'javascript-eslint 'vue-mode)
-  (flycheck-add-mode 'javascript-eslint 'js2-mode)
+  (flycheck-add-mode 'javascript-eslint 'js-mode)
   (global-flycheck-mode)
   (add-to-list 'display-buffer-alist
 	       `(,(rx bos "*Flycheck errors*" eos)
@@ -166,12 +171,6 @@
   (add-hook 'web-mode-hook 'web-mode-add-electric-pairs))
 ;; web-mode for HTML + VueJS
 
-(use-package js2-mode
-  :init
-  (add-hook 'js2-mode-hook 'electric-pair-mode)
-  (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode)))
-;; nice mode for working in javascript files
-
 (use-package prettier-js
   :config
   (defun enable-minor-mode (my-pair)
@@ -183,12 +182,12 @@
   (add-hook 'web-mode-hook #'(lambda ()
 			       (enable-minor-mode
 				'("\\.vue?\\'" . prettier-js-mode))))
-  (add-hook 'js2-mode-hook 'prettier-js-mode))
+  (add-hook 'js-mode-hook 'prettier-js-mode))
 ;; prettier-js code formatting
 
 (use-package eglot
   :config
-  (add-to-list 'eglot-server-programs '(js2-mode . ("javascript-typescript-stdio"))))
+  (add-to-list 'eglot-server-programs '(js-mode . ("javascript-typescript-stdio"))))
 ;; language-server-protocol client
 
 (use-package vue-mode
@@ -222,6 +221,8 @@
        :dev
        (:vlsPath ""))
       ))
+  (add-hook 'vue-mode-hook 'emmet-mode)
+  (add-hook 'vue-mode-hook 'prettier-js-mode)
   (add-hook 'vue-mode-hook 'electric-pair-mode))
 ;;vuejs mode
 
@@ -245,8 +246,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(electric-pair-mode t)
- '(vue-html-tab-width 0))
+ '(package-selected-packages
+   (quote
+    (night-owl-theme web-mode vue-mode use-package treemacs-evil skewer-mode shackle rainbow-delimiters prettier-js overcast-theme nyan-mode magit indium flycheck fancy-battery exec-path-from-shell emmet-mode eglot editorconfig doom-modeline counsel atom-one-dark-theme atom-dark-theme add-node-modules-path))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
