@@ -14,5 +14,6 @@ bookmarks
 recentf~
 .cache/
 .session.*
+session.*
 transient/
 url/

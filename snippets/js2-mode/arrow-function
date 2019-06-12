@@ -1,0 +1,7 @@
+# key: afn
+# name: ES6 arrow function
+# contributor: Sean Brage
+# --
+=> {
+   ${1}
+}

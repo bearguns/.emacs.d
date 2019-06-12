@@ -32,11 +32,15 @@
 ;; show line numbers in newer versions of emacs
 
 (set-face-attribute 'default nil
-		    :font "DejaVuSansMono Nerd Font-15")
+		    :font "DejaVuSansMono Nerd Font-12")
 ;; easy to read font at a decent height on most monitors
 
 (show-paren-mode 1)
 ;; show matching parens, very helpful
+
+;; add manually-installed themes
+(add-to-list 'custom-theme-load-path "~/.emacs.d/custom-themes")
+(load-theme 'naysayer t)
 
 ;; Package Manager ;;
 (require 'package)
@@ -54,8 +58,8 @@
 (require 'use-package)
 ;; use use-package because it's what people use and it's nice
 
-(use-package night-owl-theme
-  :init (load-theme 'night-owl t))
+;; (use-package night-owl-theme
+;;   :init (load-theme 'night-owl t))
 ;; use a nice, low-noise theme
 
 ;; I couldn't resist

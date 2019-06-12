@@ -1,0 +1,3 @@
+[submodule "lisp/naysayer-theme.el"]
+	path = lisp/naysayer-theme.el
+	url = git@github.com:nickav/naysayer-theme.el.git
