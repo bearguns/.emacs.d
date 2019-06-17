@@ -27,12 +27,8 @@
 (electric-indent-mode 1)
 ;; electric indent mode is pretty smart about properly indenting code
 
-(line-number-mode -1)
-(global-display-line-numbers-mode)
-;; show line numbers in newer versions of emacs
-
 (set-face-attribute 'default nil
-		    :font "DejaVuSansMono Nerd Font-12")
+		    :font "DejaVuSansMono Nerd Font-14")
 ;; easy to read font at a decent height on most monitors
 
 (show-paren-mode 1)
@@ -72,7 +68,6 @@
   (nyan-mode))
 ;; couple of handy modeline items
 
-
 (use-package yasnippet
   :ensure t
   :defer t
@@ -105,16 +100,6 @@
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file))
 ;;; counsel provides excellent ido-like completion tools
-
-(use-package rainbow-delimiters
-  :config (rainbow-delimiters-mode 1)
-  :init
-  (add-hook 'web-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'js-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'vue-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'org-mode-hook #'rainbow-delimiters-mode))
-;; colorize nested delimiters for easy reading
 
 (use-package magit
   :ensure t
@@ -164,6 +149,9 @@
   (setq web-mode-enable-current-element-highlight t)
   (setq web-mode-enable-auto-pairing nil)
   (setq web-mode-enable-auto-closing t)
+  (setq web-mode-builtin-face nil)
+  (setq web-mode-keyword-face nil)
+  (setq web-mode-function-name-face nil)
   :init
   (add-hook 'web-mode-hook 'emmet-mode)
   (add-hook 'web-mode-hook 'electric-pair-mode)
@@ -245,17 +233,3 @@
   :config
   (exec-path-from-shell-initialize))
 ;;; init.el ends here
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (night-owl-theme web-mode vue-mode use-package treemacs-evil skewer-mode shackle rainbow-delimiters prettier-js overcast-theme nyan-mode magit indium flycheck fancy-battery exec-path-from-shell emmet-mode eglot editorconfig doom-modeline counsel atom-one-dark-theme atom-dark-theme add-node-modules-path))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
